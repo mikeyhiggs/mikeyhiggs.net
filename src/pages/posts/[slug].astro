@@ -1,0 +1,30 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+<Layout title={`${post.data.title} | Mikey Higgs`}>
+  <article>
+    {post.data.image && <img src={post.data.image} alt="" class="post-hero-img" />}
+    <div class="hero" style="border-bottom: none; padding-bottom: 0;">
+      <div class="hero-kicker">
+        {post.data.date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+      </div>
+      <h1>{post.data.title}</h1>
+      {post.data.excerpt && <p class="hero-bio">{post.data.excerpt}</p>}
+    </div>
+    <div class="post-content">
+      <Content />
+    </div>
+  </article>
+</Layout>

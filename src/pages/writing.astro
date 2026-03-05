@@ -1,0 +1,27 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('posts');
+posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+<Layout title="Writing | Mikey Higgs">
+  <section>
+    <div class="section-head">
+      <h2>Writing</h2>
+      <a href="https://micro.blog/mikeyhiggs" class="section-link" target="_blank">All posts →</a>
+    </div>
+    <div class="cards">
+  {posts.map((post: any) => (
+    <a href={`/posts/${post.slug}`} class="card">
+      {post.data.image && <img class="card-img" src={post.data.image} alt="" />}
+      <div class="card-body">
+        <div class="card-date">{post.data.date.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}</div>
+        <div class="card-title">{post.data.title}</div>
+        {post.data.excerpt && <div class="card-excerpt">{post.data.excerpt}</div>}
+      </div>
+    </a>
+  ))}
+</div>
+  </section>
+</Layout>
