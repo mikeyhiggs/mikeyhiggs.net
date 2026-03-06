@@ -9,4 +9,13 @@ const posts = defineCollection({
   }),
 });
 
-export const collections = { posts };
+const videos = defineCollection({
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    url: z.string(),
+    thumbnail: z.string().optional(),
+  }),
+});
+
+export const collections = { posts, videos };

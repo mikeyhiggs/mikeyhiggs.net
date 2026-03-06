@@ -1,17 +1,26 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const videos = await getCollection('videos');
+videos.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 <Layout title="Videos | Mikey Higgs">
   <section>
     <div class="section-head">
       <h2>Videos</h2>
-      <a href="https://youtube.com/@mikeyhiggs" class="section-link" target="_blank">YouTube →</a>
+      <a href="https://youtube.com/@mikey-higgs" class="section-link" target="_blank">YouTube →</a>
     </div>
-    <div class="yt-placeholder">
-      <div class="yt-icon">▶</div>
-      <div class="yt-label">Ratios and Unitary Ratios</div>
-      <div class="yt-sub">Watch on YouTube — maths explained clearly, one topic at a time.</div>
-      <a href="https://youtube.com/@mikeyhiggs" class="btn btn-outline" target="_blank">Watch on YouTube</a>
+    <div class="cards">
+      {videos.map((v: any) => (
+        <a href={v.data.url} class="card" target="_blank">
+          {v.data.thumbnail && <img class="card-img" src={v.data.thumbnail} alt={v.data.title} />}
+          <div class="card-body">
+            <div class="card-date">{v.data.date.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}</div>
+            <div class="card-title">{v.data.title}</div>
+          </div>
+        </a>
+      ))}
     </div>
   </section>
 </Layout>

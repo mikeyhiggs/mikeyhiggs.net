@@ -5,91 +5,66 @@ import { getCollection } from 'astro:content';
 const posts = await getCollection('posts');
 posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const recentPosts = posts.slice(0, 3);
+
+const videos = await getCollection('videos');
+videos.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const recentVideos = videos.slice(0, 3);
+
 ---
 <Layout>
 
+<div class="hero">
+  <p class="hero-bio">
+    I'm an <strong>Information Officer in the NHS</strong> looking to train to teach secondary maths in September 2026. I am very interested in <strong>visualising maths</strong>.
+  </p>
+</div>
 
-  <!-- Hero -->
-
-  <div class="hero">
-    <div class="hero-kicker">Maths teacher in training · mikeyhiggs.net</div>
-    <h1>Mikey<br/><em>Higgs</em></h1>
-    <p class="hero-bio">
-      I'm an <strong>Information Officer at the NHS</strong> training to teach secondary maths from September 2025. I use R, SQL, and Python at work and think maths is best understood when you can <strong>see it</strong>.
-    </p>
-    
+<section>
+  <div class="section-head">
+    <h2>Writing</h2>
+    <a href="/writing" class="section-link">All posts →</a>
   </div>
-
-  <!-- Projects -->
-
-  <section id="projects">
-    <div class="section-head">
-      <h2>Projects</h2>
-      <a href="/projects" class="section-link">All projects →</a>
-    </div>
-
-<a href="#" class="project-card">
-  <div class="project-card-top">
-    <div class="project-title">Sieve of Eratosthenes</div>
-    <span class="project-status status-wip">In progress</span>
+  <div class="cards">
+    {recentPosts.map((post: any) => (
+      <a href={`/posts/${post.slug}`} class="card">
+        {post.data.image && <img class="card-img" src={post.data.image} alt="" />}
+        <div class="card-body">
+          <div class="card-date">{post.data.date.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}</div>
+          <div class="card-title">{post.data.title}</div>
+          {post.data.excerpt && <div class="card-excerpt">{post.data.excerpt}</div>}
+        </div>
+      </a>
+    ))}
   </div>
-  <div class="project-desc">An animated prime number sieve built in Python — my first properly understood visualisation project.</div>
-  <div class="project-tag">Python · Number theory · KS3–4</div>
-</a>
+</section>
 
-  </section>
-
-  <!-- Writing -->
-
-  <section id="writing">
-    <div class="section-head">
-      <h2>Writing</h2>
-      <a href="/writing" class="section-link">All posts →</a>
+<section>
+  <div class="section-head">
+    <h2>Projects</h2>
+    <a href="/projects" class="section-link">All projects →</a>
+  </div>
+  <a href="#" class="project-card">
+    <div class="project-card-top">
+      <div class="project-title">Sieve of Eratosthenes</div>
+      <span class="project-status status-wip">Coming soon</span>
     </div>
+    <div class="project-desc"></div>
+    <div class="project-tag">Python · Number theory · KS3–4</div>
+  </a>
+</section>
 
-<div class="cards">
-  {posts.map((post: any) => (
-    <a href={`/posts/${post.slug}`} class="card">
-      {post.data.image && <img class="card-img" src={post.data.image} alt="" />}
+<section>
+  <div class="cards">
+  {recentVideos.map((v: any) => (
+    <a href={v.data.url} class="card" target="_blank">
+      {v.data.thumbnail && <img class="card-img" src={v.data.thumbnail} alt={v.data.title} />}
       <div class="card-body">
-        <div class="card-date">{post.data.date.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}</div>
-        <div class="card-title">{post.data.title}</div>
-        {post.data.excerpt && <div class="card-excerpt">{post.data.excerpt}</div>}
+        <div class="card-date">{v.data.date.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}</div>
+        <div class="card-title">{v.data.title}</div>
       </div>
     </a>
   ))}
 </div>
-
-  </section>
-
-  <!-- Videos -->
-
-  <section id="videos">
-    <div class="section-head">
-      <h2>Videos</h2>
-      <a href="/videos" class="section-link">All videos →</a>
-    </div>
-
-<div class="yt-placeholder">
-  <div class="yt-icon">▶</div>
-  <div class="yt-label">Ratios and Unitary Ratios</div>
-  <div class="yt-sub">Watch on YouTube — maths explained clearly, one topic at a time.</div>
-  <a href="https://youtube.com/@mikeyhiggs" class="btn btn-outline" target="_blank" style="margin-top:0.25rem;">Watch on YouTube</a>
-</div>
-
-  </section>
-
-  <!-- Footer -->
-
-  <footer>
-    <div class="footer-name">Mikey <em>Higgs</em></div>
-    <div class="footer-links">
-      <a href="https://github.com/mikeyhiggs" target="_blank">GitHub</a>
-      <a href="https://micro.blog/mikeyhiggs" target="_blank">Blog</a>
-      <a href="https://youtube.com/@mikeyhiggs" target="_blank">YouTube</a>
-      <a href="mailto:hello@mikeyhiggs.net">Contact</a>
-    </div>
-  </footer>
-
+</section>
 
 </Layout>
