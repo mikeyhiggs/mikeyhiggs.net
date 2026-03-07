@@ -54,6 +54,10 @@ const recentVideos = videos.slice(0, 3);
 </section>
 
 <section>
+	<div class="section-head">
+    <h2>Videos</h2>
+    <a href="/videos" class="section-link">All videos →</a>
+  </div>
   <div class="cards">
   {recentVideos.map((v: any) => (
     <a href={v.data.url} class="card" target="_blank">
