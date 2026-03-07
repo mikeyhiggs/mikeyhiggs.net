@@ -1,0 +1,509 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Timer | Mikey Higgs" bare={true}>
+  <section class="timer-section">
+
+    <div class="timer-wrap">
+
+      <!-- SVG ring progress -->
+      <div class="ring-wrap">
+        <svg class="ring" viewBox="0 0 300 300" id="ring-svg">
+          <circle class="ring-track" cx="150" cy="150" r="130"/>
+          <circle class="ring-progress" cx="150" cy="150" r="130" id="ring-progress"/>
+        </svg>
+        <div class="timer-face">
+          <div class="timer-display" id="timer-display">05:00</div>
+          <div class="timer-label" id="timer-label">ready</div>
+        </div>
+      </div>
+
+      <!-- Preset buttons -->
+      <div class="presets">
+        <button class="preset active" data-seconds="60">1m</button>
+        <button class="preset" data-seconds="120">2m</button>
+        <button class="preset" data-seconds="300">5m</button>
+        <button class="preset" data-seconds="600">10m</button>
+        <button class="preset" data-seconds="900">15m</button>
+        <button class="preset" data-seconds="1800">30m</button>
+      </div>
+
+      <!-- Custom time input -->
+      <div class="custom-row">
+        <input type="number" id="custom-min" min="0" max="99" value="5" placeholder="min"/>
+        <span class="custom-sep">:</span>
+        <input type="number" id="custom-sec" min="0" max="59" value="0" placeholder="sec"/>
+        <button class="custom-set" id="custom-set-btn">Set</button>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls">
+        <button class="ctrl-btn" id="start-btn">▶ Start</button>
+        <button class="ctrl-btn ctrl-ghost" id="reset-btn">↺ Reset</button>
+      </div>
+
+    </div>
+
+    <!-- Particles container -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Fullscreen hint -->
+    <button class="fs-btn" id="fs-btn" title="Fullscreen">⛶</button>
+
+  </section>
+</Layout>
+
+<style is:global>
+  /* Override section padding for timer page */
+  .timer-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 70vh;
+    padding: 2rem 0 !important;
+    border-bottom: none !important;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .timer-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.75rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ── Ring ── */
+  .ring-wrap {
+    position: relative;
+    width: 280px;
+    height: 280px;
+  }
+
+  .ring {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+
+  .ring-track {
+    fill: none;
+    stroke: var(--rule);
+    stroke-width: 8;
+  }
+
+  .ring-progress {
+    fill: none;
+    stroke: var(--orange);
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 817; /* 2πr ≈ 817 */
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1s linear, stroke 0.5s;
+  }
+
+  .ring-progress.urgent { stroke: #E8301C; }
+
+  .timer-face {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+  }
+
+  .timer-display {
+    font-family: 'Fraunces', serif;
+    font-size: 4.5rem;
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    color: var(--ink);
+    line-height: 1;
+    transition: color 0.5s;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .timer-display.urgent { color: #E8301C; }
+  .timer-display.done   { color: var(--orange); }
+
+  .timer-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+  }
+
+  /* ── Pulse animation when running ── */
+  @keyframes pulse-ring {
+    0%, 100% { transform: scale(1); }
+    50%       { transform: scale(1.015); }
+  }
+
+  .ring-wrap.running { animation: pulse-ring 2s ease-in-out infinite; }
+  .ring-wrap.urgent  { animation: pulse-ring 0.6s ease-in-out infinite; }
+
+  .ring-wrap.done { animation: none; }
+
+  /* ── Presets ── */
+  .presets {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .preset {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    padding: 0.35rem 0.75rem;
+    border: 1.5px solid var(--rule);
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.05em;
+  }
+
+  .preset:hover { border-color: var(--orange); color: var(--orange); }
+  .preset.active { border-color: var(--orange); background: var(--orange); color: white; }
+
+  /* ── Custom time ── */
+  .custom-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .custom-row input {
+    font-family: 'Fraunces', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    width: 3.5rem;
+    padding: 0.4rem 0.5rem;
+    border: 1.5px solid var(--rule);
+    border-radius: 6px;
+    background: var(--bg);
+    color: var(--ink);
+    outline: none;
+    text-align: center;
+    transition: border-color 0.15s;
+    -moz-appearance: textfield;
+  }
+
+  .custom-row input::-webkit-outer-spin-button,
+  .custom-row input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+  .custom-row input:focus { border-color: var(--orange); }
+
+  .custom-sep {
+    font-family: 'Fraunces', serif;
+    font-size: 1.3rem;
+    color: var(--muted);
+  }
+
+  .custom-set {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    padding: 0.4rem 0.9rem;
+    border: 1.5px solid var(--rule);
+    border-radius: 6px;
+    background: var(--bg);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .custom-set:hover { border-color: var(--orange); color: var(--orange); }
+
+  /* ── Controls ── */
+  .controls { display: flex; gap: 0.75rem; }
+
+  .ctrl-btn {
+    font-family: 'Atkinson Hyperlegible', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 0.65rem 1.75rem;
+    border-radius: 8px;
+    border: none;
+    background: var(--orange);
+    color: white;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.02em;
+  }
+
+  .ctrl-btn:hover { background: #cf551a; }
+
+  .ctrl-ghost {
+    background: transparent;
+    border: 1.5px solid var(--rule);
+    color: var(--muted);
+  }
+
+  .ctrl-ghost:hover { border-color: var(--ink); color: var(--ink); background: transparent; }
+
+  /* ── Fullscreen button ── */
+  .fs-btn {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: none;
+    border: 1.5px solid var(--rule);
+    border-radius: 6px;
+    padding: 0.4rem 0.6rem;
+    font-size: 1rem;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    z-index: 10;
+  }
+
+  .fs-btn:hover { border-color: var(--orange); color: var(--orange); }
+
+  /* ── Confetti particles ── */
+  .particles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+    overflow: hidden;
+  }
+
+  .particle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    opacity: 0;
+    animation: fall linear forwards;
+  }
+
+  @keyframes fall {
+    0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* ── Done flash overlay ── */
+  @keyframes flash {
+    0%, 100% { opacity: 0; }
+    10%, 30%, 50% { opacity: 0.15; }
+    20%, 40% { opacity: 0; }
+  }
+
+  .flash-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--orange);
+    pointer-events: none;
+    z-index: 4;
+    animation: flash 1.5s ease forwards;
+  }
+</style>
+
+<script is:inline>
+  var CIRCUMFERENCE = 2 * Math.PI * 130; // ≈ 817
+
+  var totalSeconds = 300;
+  var remaining = 300;
+  var running = false;
+  var interval = null;
+
+  var display    = document.getElementById('timer-display');
+  var label      = document.getElementById('timer-label');
+  var progress   = document.getElementById('ring-progress');
+  var ringWrap   = document.querySelector('.ring-wrap');
+  var startBtn   = document.getElementById('start-btn');
+  var resetBtn   = document.getElementById('reset-btn');
+  var particles  = document.getElementById('particles');
+  var fsBtn      = document.getElementById('fs-btn');
+
+  function formatTime(s) {
+    var m = Math.floor(s / 60);
+    var sec = s % 60;
+    return String(m).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
+  }
+
+  function updateRing() {
+    var pct = totalSeconds > 0 ? remaining / totalSeconds : 0;
+    progress.style.strokeDashoffset = CIRCUMFERENCE * (1 - pct);
+  }
+
+  function updateUrgency() {
+    var urgent = remaining <= 10 && remaining > 0;
+    display.classList.toggle('urgent', urgent);
+    progress.classList.toggle('urgent', urgent);
+    ringWrap.classList.toggle('urgent', urgent);
+  }
+
+  function setTime(seconds) {
+    stop();
+    totalSeconds = seconds;
+    remaining = seconds;
+    display.textContent = formatTime(remaining);
+    display.classList.remove('urgent', 'done');
+    progress.classList.remove('urgent');
+    progress.style.transition = 'stroke-dashoffset 0.3s ease, stroke 0.5s';
+    ringWrap.classList.remove('running', 'urgent', 'done');
+    label.textContent = 'ready';
+    updateRing();
+    startBtn.textContent = '▶ Start';
+  }
+
+  function start() {
+    if (remaining <= 0) return;
+    running = true;
+    ringWrap.classList.add('running');
+    ringWrap.classList.remove('done');
+    label.textContent = 'running';
+    startBtn.textContent = '⏸ Pause';
+    progress.style.transition = 'stroke-dashoffset 1s linear, stroke 0.5s';
+
+    interval = setInterval(function() {
+      remaining--;
+      display.textContent = formatTime(remaining);
+      updateRing();
+      updateUrgency();
+
+      if (remaining <= 0) {
+        done();
+      }
+    }, 1000);
+  }
+
+  function pause() {
+    running = false;
+    clearInterval(interval);
+    ringWrap.classList.remove('running', 'urgent');
+    label.textContent = 'paused';
+    startBtn.textContent = '▶ Resume';
+    progress.style.transition = 'stroke-dashoffset 0.3s ease, stroke 0.5s';
+  }
+
+  function stop() {
+    running = false;
+    clearInterval(interval);
+  }
+
+  function done() {
+    stop();
+    display.classList.remove('urgent');
+    display.classList.add('done');
+    ringWrap.classList.remove('running', 'urgent');
+    ringWrap.classList.add('done');
+    label.textContent = "time's up!";
+    startBtn.textContent = '▶ Start';
+    progress.style.strokeDashoffset = CIRCUMFERENCE;
+
+    // Flash overlay
+    var flash = document.createElement('div');
+    flash.className = 'flash-overlay';
+    document.body.appendChild(flash);
+    setTimeout(function() { flash.remove(); }, 1500);
+
+    // Confetti!
+    launchConfetti();
+
+    // Beep
+    beep();
+  }
+
+  function launchConfetti() {
+    var colors = ['#E8601C', '#1C1C1E', '#FAFAF8', '#E8D01C', '#1CE8A0'];
+    for (var i = 0; i < 80; i++) {
+      (function(i) {
+        setTimeout(function() {
+          var p = document.createElement('div');
+          p.className = 'particle';
+          p.style.left = Math.random() * 100 + 'vw';
+          p.style.top = '-20px';
+          p.style.background = colors[Math.floor(Math.random() * colors.length)];
+          p.style.width = (6 + Math.random() * 10) + 'px';
+          p.style.height = (6 + Math.random() * 10) + 'px';
+          p.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+          p.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+          p.style.animationDelay = '0s';
+          particles.appendChild(p);
+          setTimeout(function() { p.remove(); }, 4000);
+        }, i * 25);
+      })(i);
+    }
+  }
+
+  function beep() {
+    try {
+      var ctx = new (window.AudioContext || window.webkitAudioContext)();
+      var notes = [523, 659, 784, 1047]; // C E G C
+      notes.forEach(function(freq, i) {
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.value = freq;
+        osc.type = 'sine';
+        gain.gain.setValueAtTime(0.3, ctx.currentTime + i * 0.15);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.15 + 0.3);
+        osc.start(ctx.currentTime + i * 0.15);
+        osc.stop(ctx.currentTime + i * 0.15 + 0.3);
+      });
+    } catch(e) {}
+  }
+
+  // Start / pause
+  startBtn.addEventListener('click', function() {
+    if (running) { pause(); } else { start(); }
+  });
+
+  // Reset
+  resetBtn.addEventListener('click', function() {
+    setTime(totalSeconds);
+  });
+
+  // Presets
+  document.querySelectorAll('.preset').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.preset').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      setTime(parseInt(btn.dataset.seconds));
+    });
+  });
+
+  // Custom set
+  document.getElementById('custom-set-btn').addEventListener('click', function() {
+    var m = parseInt(document.getElementById('custom-min').value) || 0;
+    var s = parseInt(document.getElementById('custom-sec').value) || 0;
+    var total = m * 60 + s;
+    if (total > 0) {
+      document.querySelectorAll('.preset').forEach(function(b) { b.classList.remove('active'); });
+      setTime(total);
+    }
+  });
+
+  // Fullscreen
+  fsBtn.addEventListener('click', function() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+    } else {
+      document.exitFullscreen();
+    }
+  });
+
+  // Space bar to start/pause
+  document.addEventListener('keydown', function(e) {
+    if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'BUTTON') {
+      e.preventDefault();
+      if (running) { pause(); } else { start(); }
+    }
+  });
+
+  // Init
+  setTime(300);
+</script>

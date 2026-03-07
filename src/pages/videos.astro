@@ -14,7 +14,7 @@ videos.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
     <div class="cards">
       {videos.map((v: any) => (
         <a href={v.data.url} class="card" target="_blank">
-          {v.data.thumbnail && <img class="card-img" src={v.data.thumbnail} alt={v.data.title} />}
+          {v.data.thumbnail && <img class="card-img-video" src={v.data.thumbnail} alt={v.data.title} />}
           <div class="card-body">
             <div class="card-date">{v.data.date.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}</div>
             <div class="card-title">{v.data.title}</div>

@@ -61,7 +61,7 @@ const recentVideos = videos.slice(0, 3);
   <div class="cards">
   {recentVideos.map((v: any) => (
     <a href={v.data.url} class="card" target="_blank">
-      {v.data.thumbnail && <img class="card-img" src={v.data.thumbnail} alt={v.data.title} />}
+      {v.data.thumbnail && <img class="card-img-video" src={v.data.thumbnail} alt={v.data.title} />}
       <div class="card-body">
         <div class="card-date">{v.data.date.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}</div>
         <div class="card-title">{v.data.title}</div>
@@ -69,6 +69,17 @@ const recentVideos = videos.slice(0, 3);
     </a>
   ))}
 </div>
+</section>
+
+<section>
+  <div class="section-head">
+    <h2>Teacher Tools</h2>
+  </div>
+  <a href="/timer" class="project-card">
+    <div class="project-card-top">
+      <div class="project-title">Classroom Timer</div>
+    </div>
+  </a>
 </section>
 
 </Layout>

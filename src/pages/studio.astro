@@ -1,0 +1,493 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Studio | Mikey Higgs">
+  <section>
+    <div class="section-head">
+      <h2>Thumbnail Generator</h2>
+    </div>
+
+    <div class="studio-layout">
+
+      <div class="controls">
+
+        <div class="field">
+          <label>Title</label>
+          <input type="text" id="input-title" value="Simplifying Ratios"/>
+        </div>
+
+        <div class="field">
+          <label>Level</label>
+          <select id="input-level">
+            <option>GCSE Maths</option>
+            <option>A Level Maths</option>
+            <option>KS3 Maths</option>
+            <option>Further Maths</option>
+            <option>Primary Maths</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <div class="label-row">
+            <label>Title Size</label>
+            <span class="label-value" id="size-value">220</span>
+          </div>
+          <input type="range" id="input-size" min="60" max="220" value="220"/>
+        </div>
+
+        <div class="field">
+          <div class="label-row">
+            <label>Level Size</label>
+            <span class="label-value" id="level-size-value">80</span>
+          </div>
+          <input type="range" id="input-level-size" min="14" max="80" value="80"/>
+        </div>
+
+        <div class="field">
+          <div class="label-row">
+            <label>MH Size</label>
+            <span class="label-value" id="mh-size-value">100</span>
+          </div>
+          <input type="range" id="input-mh-size" min="14" max="100" value="100"/>
+        </div>
+
+        <div class="field">
+          <div class="label-row">
+            <label>Symbol Size</label>
+            <span class="label-value" id="sym-size-value">295</span>
+          </div>
+          <input type="range" id="input-sym-size" min="50" max="600" value="295"/>
+        </div>
+
+        <div class="field">
+          <label>Symbol</label>
+          <div class="sym-group-label">General</div>
+          <div class="symbol-grid">
+            <button class="sym-btn active" data-sym="÷">÷</button>
+            <button class="sym-btn" data-sym=":">:</button>
+            <button class="sym-btn" data-sym="×">×</button>
+            <button class="sym-btn" data-sym="+">+</button>
+            <button class="sym-btn" data-sym="−">−</button>
+            <button class="sym-btn" data-sym="=">=</button>
+            <button class="sym-btn" data-sym="≠">≠</button>
+            <button class="sym-btn" data-sym="<">&lt;</button>
+            <button class="sym-btn" data-sym=">">&gt;</button>
+            <button class="sym-btn" data-sym="%">%</button>
+          </div>
+          <div class="sym-group-label">GCSE</div>
+          <div class="symbol-grid">
+            <button class="sym-btn" data-sym="²">²</button>
+            <button class="sym-btn" data-sym="³">³</button>
+            <button class="sym-btn" data-sym="√">√</button>
+            <button class="sym-btn" data-sym="∛">∛</button>
+            <button class="sym-btn" data-sym="π">π</button>
+            <button class="sym-btn" data-sym="°">°</button>
+            <button class="sym-btn" data-sym="∠">∠</button>
+            <button class="sym-btn" data-sym="△">△</button>
+            <button class="sym-btn" data-sym="∝">∝</button>
+            <button class="sym-btn" data-sym="≈">≈</button>
+          </div>
+          <div class="sym-group-label">A Level</div>
+          <div class="symbol-grid">
+            <button class="sym-btn" data-sym="∑">∑</button>
+            <button class="sym-btn" data-sym="∫">∫</button>
+            <button class="sym-btn" data-sym="∞">∞</button>
+            <button class="sym-btn" data-sym="∂">∂</button>
+            <button class="sym-btn" data-sym="Δ">Δ</button>
+            <button class="sym-btn" data-sym="θ">θ</button>
+            <button class="sym-btn" data-sym="λ">λ</button>
+            <button class="sym-btn" data-sym="μ">μ</button>
+            <button class="sym-btn" data-sym="σ">σ</button>
+            <button class="sym-btn" data-sym="∈">∈</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Colour</label>
+          <div class="color-grid">
+            <div class="color-btn active" style="background:#E8601C" data-color="#E8601C"></div>
+            <div class="color-btn" style="background:#1C1C1E" data-color="#1C1C1E"></div>
+            <div class="color-btn" style="background:#2D6A4F" data-color="#2D6A4F"></div>
+            <div class="color-btn" style="background:#3A5F8A" data-color="#3A5F8A"></div>
+            <div class="color-btn" style="background:#7B2D8B" data-color="#7B2D8B"></div>
+          </div>
+        </div>
+
+        <button class="dl-btn" id="dl-btn">⬇ Download PNG (1280×720)</button>
+
+      </div>
+
+      <div class="preview-wrap">
+        <span class="preview-label">Preview</span>
+        <div id="thumb" style="width:100%;aspect-ratio:16/9;position:relative;overflow:hidden;border-radius:8px;box-shadow:0 8px 32px rgba(0,0,0,0.15);background:#E8601C;">
+          <div id="thumb-slash" style="position:absolute;top:-20%;right:18%;width:14%;height:160%;background:rgba(0,0,0,0.12);transform:rotate(12deg);"></div>
+          <div id="thumb-symbol" style="position:absolute;bottom:-0.1em;right:-0.02em;font-family:Georgia,serif;font-weight:bold;color:rgba(0,0,0,0.10);line-height:1;white-space:nowrap;pointer-events:none;">÷</div>
+          <div id="thumb-tag" style="position:absolute;top:6%;left:4.5%;font-family:'DM Mono',monospace;font-weight:500;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.75);white-space:nowrap;">GCSE MATHS</div>
+          <div id="thumb-mh" style="position:absolute;top:5%;right:4.5%;font-family:'Fraunces',serif;font-weight:300;color:rgba(255,255,255,0.5);">MH</div>
+          <div id="thumb-title" style="position:absolute;left:4.5%;right:4.5%;bottom:4%;font-family:'Fraunces',serif;font-weight:800;color:white;letter-spacing:-0.04em;line-height:0.9;word-break:break-word;">Simplifying Ratios</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</Layout>
+
+<canvas id="canvas" width="1280" height="720" style="display:none"></canvas>
+
+<style is:global>
+  .studio-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .controls {
+    background: white;
+    border-radius: 10px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    border: 1.5px solid var(--rule);
+    overflow: hidden;
+  }
+
+  .controls .field { display: flex; flex-direction: column; gap: 0.4rem; }
+
+  .controls label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  .label-row { display: flex; justify-content: space-between; align-items: center; }
+
+  .label-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--orange);
+  }
+
+  .controls input[type="text"],
+  .controls select {
+    font-family: 'Atkinson Hyperlegible', sans-serif;
+    font-size: 0.875rem;
+    padding: 0.55rem 0.7rem;
+    border: 1.5px solid var(--rule);
+    border-radius: 6px;
+    background: var(--bg);
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
+  }
+  .controls input[type="text"]:focus,
+  .controls select:focus { border-color: var(--orange); }
+
+  .controls input[type="range"] { width: 100%; accent-color: var(--orange); cursor: pointer; }
+
+  .sym-group-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--orange);
+    margin-top: 0.4rem;
+    margin-bottom: 0.1rem;
+  }
+
+  .symbol-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.4rem;
+    margin-bottom: 0.1rem;
+  }
+
+  .sym-btn {
+    font-size: 1.1rem;
+    padding: 0.35rem;
+    border: 1.5px solid var(--rule);
+    border-radius: 6px;
+    background: var(--bg);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+    color: var(--ink);
+  }
+  .sym-btn:hover { border-color: var(--orange); color: var(--orange); }
+  .sym-btn.active { border-color: var(--orange); background: var(--orange); color: white; }
+
+  .color-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.4rem; }
+
+  .color-btn {
+    height: 30px;
+    border-radius: 6px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .color-btn.active { border-color: var(--ink); transform: scale(1.1); }
+
+  .dl-btn {
+    font-family: 'Atkinson Hyperlegible', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 700;
+    padding: 0.7rem 1rem;
+    background: var(--orange);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s;
+    width: 100%;
+  }
+  .dl-btn:hover { background: #cf551a; }
+
+  .preview-wrap { display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .preview-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  #thumb {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  }
+
+  #thumb-slash {
+    position: absolute;
+    top: -20%; right: 18%;
+    width: 14%; height: 160%;
+    background: rgba(0,0,0,0.12);
+    transform: rotate(12deg);
+  }
+
+  #thumb-symbol {
+    position: absolute;
+    bottom: -0.1em; right: -0.02em;
+    font-family: Georgia, serif;
+    font-weight: bold;
+    color: rgba(0,0,0,0.10);
+    line-height: 1;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  #thumb-tag {
+    position: absolute;
+    top: 6%; left: 4.5%;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.75);
+    white-space: nowrap;
+  }
+
+  #thumb-mh {
+    position: absolute;
+    top: 5%; right: 4.5%;
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    color: rgba(255,255,255,0.5);
+  }
+
+  #thumb-title {
+    position: absolute;
+    left: 4.5%; right: 4.5%; bottom: 4%;
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    color: white;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+    word-break: break-word;
+  }
+
+  @media (max-width: 680px) {
+    .studio-layout { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script is:inline>
+  var state = {
+    title: 'Simplifying Ratios',
+    level: 'GCSE Maths',
+    color: '#E8601C',
+    symbol: '÷',
+    fontSize: 220,
+    levelSize: 80,
+    mhSize: 100,
+    symSize: 295,
+  };
+
+  function updatePreview() {
+    var thumb = document.getElementById('thumb');
+    var W = thumb.offsetWidth;
+    var scale = W / 1280;
+
+    thumb.style.background = state.color;
+    document.getElementById('thumb-symbol').textContent = state.symbol;
+    document.getElementById('thumb-symbol').style.fontSize = (state.symSize * scale) + 'px';
+    document.getElementById('thumb-tag').textContent = state.level.toUpperCase();
+    document.getElementById('thumb-tag').style.fontSize = (state.levelSize * scale) + 'px';
+    document.getElementById('thumb-mh').style.fontSize = (state.mhSize * scale) + 'px';
+    document.getElementById('thumb-title').textContent = state.title;
+    document.getElementById('thumb-title').style.fontSize = (state.fontSize * scale) + 'px';
+  }
+
+  document.getElementById('input-title').addEventListener('input', function() {
+    state.title = this.value;
+    updatePreview();
+  });
+
+  document.getElementById('input-level').addEventListener('change', function() {
+    state.level = this.value;
+    updatePreview();
+  });
+
+  document.getElementById('input-size').addEventListener('input', function() {
+    state.fontSize = parseInt(this.value);
+    document.getElementById('size-value').textContent = state.fontSize;
+    updatePreview();
+  });
+
+  document.getElementById('input-level-size').addEventListener('input', function() {
+    state.levelSize = parseInt(this.value);
+    document.getElementById('level-size-value').textContent = state.levelSize;
+    updatePreview();
+  });
+
+  document.getElementById('input-mh-size').addEventListener('input', function() {
+    state.mhSize = parseInt(this.value);
+    document.getElementById('mh-size-value').textContent = state.mhSize;
+    updatePreview();
+  });
+
+  document.getElementById('input-sym-size').addEventListener('input', function() {
+    state.symSize = parseInt(this.value);
+    document.getElementById('sym-size-value').textContent = state.symSize;
+    updatePreview();
+  });
+
+  document.querySelectorAll('.sym-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      state.symbol = btn.dataset.sym;
+      document.querySelectorAll('.sym-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      updatePreview();
+    });
+  });
+
+  document.querySelectorAll('.color-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      state.color = btn.dataset.color;
+      document.querySelectorAll('.color-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      updatePreview();
+    });
+  });
+
+  document.getElementById('dl-btn').addEventListener('click', function() {
+    var W = 1280, H = 720;
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+
+    document.fonts.ready.then(function() {
+      ctx.clearRect(0, 0, W, H);
+
+      ctx.fillStyle = state.color;
+      ctx.fillRect(0, 0, W, H);
+
+      ctx.save();
+      ctx.translate(W * 0.82, H * 0.5);
+      ctx.rotate(12 * Math.PI / 180);
+      ctx.fillStyle = 'rgba(0,0,0,0.12)';
+      ctx.fillRect(-W * 0.07, -H, W * 0.14, H * 3);
+      ctx.restore();
+
+      ctx.save();
+      ctx.font = 'bold ' + state.symSize + 'px Georgia, serif';
+      ctx.fillStyle = 'rgba(0,0,0,0.10)';
+      ctx.textBaseline = 'bottom';
+      ctx.textAlign = 'right';
+      ctx.fillText(state.symbol, W + 20, H + 60);
+      ctx.restore();
+
+      ctx.save();
+      ctx.font = '500 ' + state.levelSize + 'px monospace';
+      ctx.fillStyle = 'rgba(255,255,255,0.75)';
+      ctx.textBaseline = 'top';
+      ctx.textAlign = 'left';
+      ctx.fillText(state.level.toUpperCase(), 58, 48);
+      ctx.restore();
+
+      ctx.save();
+      ctx.font = '300 ' + state.mhSize + 'px Fraunces, serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.5)';
+      ctx.textBaseline = 'top';
+      ctx.textAlign = 'right';
+      ctx.fillText('MH', W - 58, 44);
+      ctx.restore();
+
+      var pad = 58;
+      var maxW = W - pad * 2;
+      var safeBottom = H - 48;
+      var headerBottom = Math.max(state.levelSize, state.mhSize) + 48 + 40;
+      var availH = safeBottom - headerBottom;
+
+      function wrapText(text, size) {
+        ctx.font = '800 ' + size + 'px Fraunces, serif';
+        var words = text.split(' ');
+        var lines = [];
+        var line = '';
+        for (var i = 0; i < words.length; i++) {
+          var test = line ? line + ' ' + words[i] : words[i];
+          if (ctx.measureText(test).width > maxW && line) { lines.push(line); line = words[i]; }
+          else line = test;
+        }
+        if (line) lines.push(line);
+        return lines;
+      }
+
+      var sz = state.fontSize;
+      var lines = wrapText(state.title, sz);
+      while (sz > 40 && lines.length * (sz * 0.95) > availH) {
+        sz -= 4;
+        lines = wrapText(state.title, sz);
+      }
+
+      ctx.save();
+      ctx.font = '800 ' + sz + 'px Fraunces, serif';
+      ctx.fillStyle = 'white';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'bottom';
+      var lineH = sz * 0.95;
+      var y = safeBottom;
+      for (var i = lines.length - 1; i >= 0; i--) {
+        ctx.fillText(lines[i], pad, y);
+        y -= lineH;
+      }
+      ctx.restore();
+
+      var a = document.createElement('a');
+      a.download = (state.title || 'thumbnail').toLowerCase().replace(/\s+/g, '-') + '-thumbnail.png';
+      a.href = canvas.toDataURL('image/png');
+      a.click();
+    });
+  });
+
+  updatePreview();
+  window.addEventListener('resize', updatePreview);
+</script>

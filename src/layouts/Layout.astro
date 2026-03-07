@@ -1,5 +1,6 @@
 ---
-const { title = "Mikey Higgs" } = Astro.props;
+const { title = "Mikey Higgs", bare = false } = Astro.props;
+
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -304,6 +305,7 @@ const { title = "Mikey Higgs" } = Astro.props;
 
   .card:hover { border-color: var(--orange); text-decoration: none; }
 
+  .card-img-video { aspect-ratio: 16/9; object-fit: cover; flex-shrink: 0; }
   .card-img { width: 140px; height: 110px; object-fit: cover; flex-shrink: 0; }
 
   .card-body {
@@ -395,51 +397,60 @@ const { title = "Mikey Higgs" } = Astro.props;
 <body>
   <div class="wrapper">
 
-    <div class="dateline">
-      <span class="dateline-centre">Information Officer</span>
-      <span class="dateline-centre">Prospective PGCE Student</span>
-      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
-    </div>
+    {!bare && (
+      <div class="dateline">
+        <span class="dateline-centre">Information Officer</span>
+        <span class="dateline-centre">Prospective PGCE Student</span>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+      </div>
+    )}
 
-    <div class="masthead">
-      <a href="/" class="masthead-name">Mikey <span class="masthead-last">Higgs</span></a>
-    </div>
+    {!bare && (
+      <div class="masthead">
+        <a href="/" class="masthead-name">Mikey <span class="masthead-last">Higgs</span></a>
+      </div>
+    )}
 
-    <nav>
-      <ul class="nav-links">
-        <li><a href="/projects">Projects</a></li>
-        <li><a href="/writing">Writing</a></li>
-        <li><a href="/videos">Videos</a></li>
-        <li><a href="/about">About</a></li>
-      </ul>
-    </nav>
+    {!bare && (
+      <nav>
+        <ul class="nav-links">
+          <li><a href="/projects">Projects</a></li>
+          <li><a href="/writing">Writing</a></li>
+          <li><a href="/videos">Videos</a></li>
+          <li><a href="/timer">Teacher Tools</a></li>
+          <li><a href="/about">About</a></li>
+        </ul>
+      </nav>
+    )}
 
     <slot />
 
-    <footer>
-      <span class="footer-name">Mikey <span class="footer-last">Higgs</span></span>
-      <div class="footer-links">
-        <a href="https://github.com/mikeyhiggs" target="_blank">GitHub</a>
-        <a href="https://bsky.app/profile/asymptopic.com" target="_blank">Bluesky</a>
-        <a href="https://youtube.com/@mikey-higgs" target="_blank">YouTube</a>
-        <a href="mailto:mikeyhiggs271@gmail.com">Contact</a>
-      </div>
-    </footer>
+    {!bare && (
+      <footer>
+        <span class="footer-name">Mikey <span class="footer-last">Higgs</span></span>
+        <div class="footer-links">
+          <a href="https://github.com/mikeyhiggs" target="_blank">GitHub</a>
+          <a href="https://bsky.app/profile/asymptopic.com" target="_blank">Bluesky</a>
+          <a href="https://youtube.com/@mikey-higgs" target="_blank">YouTube</a>
+          <a href="mailto:mikeyhiggs271@gmail.com">Contact</a>
+        </div>
+      </footer>
+    )}
 
   </div>
 
   <script is:inline>
     const toggle = document.getElementById('theme-toggle');
-    const html = document.documentElement;
-
-    toggle.textContent = html.classList.contains('dark') ? '☀️' : '🌙';
-
-    toggle.addEventListener('click', () => {
-      html.classList.toggle('dark');
-      const isDark = html.classList.contains('dark');
-      localStorage.theme = isDark ? 'dark' : 'light';
-      toggle.textContent = isDark ? '☀️' : '🌙';
-    });
+    if (toggle) {
+      const html = document.documentElement;
+      toggle.textContent = html.classList.contains('dark') ? '☀️' : '🌙';
+      toggle.addEventListener('click', () => {
+        html.classList.toggle('dark');
+        const isDark = html.classList.contains('dark');
+        localStorage.theme = isDark ? 'dark' : 'light';
+        toggle.textContent = isDark ? '☀️' : '🌙';
+      });
+    }
   </script>
 </body>
 </html>
