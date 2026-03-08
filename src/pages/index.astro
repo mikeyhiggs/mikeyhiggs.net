@@ -10,12 +10,15 @@ const videos = await getCollection('videos');
 videos.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const recentVideos = videos.slice(0, 3);
 
+const tools = await getCollection('tools');
+tools.sort((a, b) => a.data.title.localeCompare(b.data.title));
+const recentTools = tools.slice(0, 3);
 ---
 <Layout>
 
 <div class="hero">
   <p class="hero-bio">
-    I'm an <strong>Information Officer in the NHS</strong> looking to train to teach secondary maths in September 2026. I am very interested in <strong>visualising maths</strong>.
+    I'm an Information Officer in the NHS looking to train to teach secondary maths in September 2026.
   </p>
 </div>
 
@@ -40,17 +43,18 @@ const recentVideos = videos.slice(0, 3);
 
 <section>
   <div class="section-head">
-    <h2>Projects</h2>
-    <a href="/projects" class="section-link">All projects →</a>
+    <h2>Teacher Tools</h2>
+    <a href="/teachertools" class="section-link">All tools →</a>
   </div>
-  <a href="#" class="project-card">
+  {recentTools.map((tool: any) => (
+  <a href={tool.data.url} class="project-card">
     <div class="project-card-top">
-      <div class="project-title">Sieve of Eratosthenes</div>
-      <span class="project-status status-wip">Coming soon</span>
+      <div class="project-title">{tool.data.title}</div>
     </div>
-    <div class="project-desc"></div>
-    <div class="project-tag">Python · Number theory · KS3–4</div>
+    <div class="project-desc">{tool.data.description}</div>
+    {tool.data.tags && <div class="project-tag">{tool.data.tags}</div>}
   </a>
+))}
 </section>
 
 <section>
@@ -71,15 +75,5 @@ const recentVideos = videos.slice(0, 3);
 </div>
 </section>
 
-<section>
-  <div class="section-head">
-    <h2>Teacher Tools</h2>
-  </div>
-  <a href="/timer" class="project-card">
-    <div class="project-card-top">
-      <div class="project-title">Classroom Timer</div>
-    </div>
-  </a>
-</section>
 
 </Layout>

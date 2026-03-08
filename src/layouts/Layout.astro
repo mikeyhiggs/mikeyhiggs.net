@@ -106,7 +106,6 @@ const { title = "Mikey Higgs", bare = false } = Astro.props;
   }
 
   .masthead-name:hover { text-decoration: none; }
-  .masthead-last { font-weight: 300; }
 
   /* ── Nav ── */
   nav {
@@ -371,8 +370,6 @@ const { title = "Mikey Higgs", bare = false } = Astro.props;
     color: var(--muted);
   }
 
-  .footer-last { font-weight: 300; }
-
   .footer-links { display: flex; gap: 1.25rem; }
 
   .footer-links a {
@@ -407,17 +404,17 @@ const { title = "Mikey Higgs", bare = false } = Astro.props;
 
     {!bare && (
       <div class="masthead">
-        <a href="/" class="masthead-name">Mikey <span class="masthead-last">Higgs</span></a>
+        <a href="/" class="masthead-name">Mikey Higgs </a>
       </div>
     )}
 
     {!bare && (
       <nav>
         <ul class="nav-links">
-          <li><a href="/projects">Projects</a></li>
           <li><a href="/writing">Writing</a></li>
+          <li><a href="/teachertools">Teacher Tools</a></li>
           <li><a href="/videos">Videos</a></li>
-          <li><a href="/timer">Teacher Tools</a></li>
+          <li><a href="/worksheets">Worksheets</a></li>
           <li><a href="/about">About</a></li>
         </ul>
       </nav>
@@ -427,7 +424,7 @@ const { title = "Mikey Higgs", bare = false } = Astro.props;
 
     {!bare && (
       <footer>
-        <span class="footer-name">Mikey <span class="footer-last">Higgs</span></span>
+        <span class="footer-name">Mikey Higgs</span>
         <div class="footer-links">
           <a href="https://github.com/mikeyhiggs" target="_blank">GitHub</a>
           <a href="https://bsky.app/profile/asymptopic.com" target="_blank">Bluesky</a>

@@ -1,0 +1,24 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const tools = await getCollection('tools');
+tools.sort((a, b) => a.data.title.localeCompare(b.data.title));
+---
+<Layout title="Teacher Tools | Mikey Higgs">
+  <section>
+    <div class="section-head">
+      <h2>Teacher Tools</h2>
+      <a href="https://github.com/mikeyhiggs" class="section-link" target="_blank">GitHub →</a>
+    </div>
+    {tools.map((tool: any) => (
+      <a href={tool.data.url} class="project-card">
+        <div class="project-card-top">
+          <div class="project-title">{tool.data.title}</div>
+        </div>
+        <div class="project-desc">{tool.data.description}</div>
+        {tool.data.tags && <div class="project-tag">{tool.data.tags}</div>}
+      </a>
+    ))}
+  </section>
+</Layout>

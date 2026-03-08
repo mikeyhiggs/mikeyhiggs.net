@@ -1,0 +1,237 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const resources = await getCollection('resources');
+resources.sort((a, b) => a.data.title.localeCompare(b.data.title));
+
+const levels = [...new Set(resources.map(r => r.data.level))].sort();
+const topics = [...new Set(resources.map(r => r.data.topic))].sort();
+---
+
+<Layout title="Worksheets | Mikey Higgs">
+  <section>
+    <div class="section-head">
+      <h2>Worksheets</h2>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-group">
+      <span class="filter-label">Level</span>
+      <div class="pills" id="level-pills">
+        <button class="pill active" data-filter="level" data-value="all">All</button>
+        {levels.map(level => (
+          <button class="pill" data-filter="level" data-value={level}>{level}</button>
+        ))}
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-label">Topic</span>
+      <div class="pills" id="topic-pills">
+        <button class="pill active" data-filter="topic" data-value="all">All</button>
+        {topics.map(topic => (
+          <button class="pill" data-filter="topic" data-value={topic}>{topic}</button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Worksheet cards -->
+    <div class="worksheet-list" id="worksheet-list">
+      {resources.map(r => (
+        <div
+          class="worksheet-card"
+          data-level={r.data.level}
+          data-topic={r.data.topic}
+        >
+          <div class="worksheet-meta">
+            <span class="ws-level">{r.data.level}</span>
+            <span class="ws-dot">·</span>
+            <span class="ws-topic">{r.data.topic}</span>
+          </div>
+          <div class="ws-title">{r.data.title}</div>
+          <div class="ws-buttons">
+            {r.data.worksheet && (
+              <a href={r.data.worksheet} download class="btn btn-filled ws-btn">
+                Worksheet
+              </a>
+            )}
+            {r.data.solutions && (
+              <a href={r.data.solutions} download class="btn btn-outline ws-btn">
+                Solutions
+              </a>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <p class="ws-empty" id="ws-empty" style="display:none;">
+      No worksheets found for this combination.
+    </p>
+
+  </section>
+</Layout>
+
+<style is:global>
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    flex-shrink: 0;
+    width: 2.5rem;
+  }
+
+  .pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .pill {
+    font-family: 'Atkinson Hyperlegible', sans-serif;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    border: 1.5px solid var(--rule);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .pill:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+
+  .pill.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--bg);
+  }
+
+  .worksheet-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .worksheet-card {
+    border: 1.5px solid var(--rule);
+    border-radius: 10px;
+    padding: 1.1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    transition: border-color 0.15s;
+  }
+
+  .worksheet-card:hover {
+    border-color: var(--orange);
+  }
+
+  .worksheet-card.hidden {
+    display: none;
+  }
+
+  .worksheet-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+    display: flex;
+    gap: 0.35rem;
+    align-items: center;
+    margin-bottom: 0.25rem;
+  }
+
+  .ws-dot { color: var(--rule); }
+
+  .ws-level { color: var(--orange); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .ws-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--ink);
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .ws-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .ws-btn {
+    font-size: 0.78rem;
+    padding: 0.4rem 0.9rem;
+  }
+
+  .ws-empty {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  @media (max-width: 480px) {
+    .worksheet-card {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .filter-label { width: auto; }
+  }
+</style>
+
+<script is:inline>
+  var activeLevel = 'all';
+  var activeTopic = 'all';
+
+  function filterCards() {
+    var cards = document.querySelectorAll('.worksheet-card');
+    var visible = 0;
+    cards.forEach(function(card) {
+      var level = card.dataset.level;
+      var topic = card.dataset.topic;
+      var show =
+        (activeLevel === 'all' || level === activeLevel) &&
+        (activeTopic === 'all' || topic === activeTopic);
+      card.classList.toggle('hidden', !show);
+      if (show) visible++;
+    });
+    document.getElementById('ws-empty').style.display = visible === 0 ? 'block' : 'none';
+  }
+
+  document.querySelectorAll('.pill').forEach(function(pill) {
+    pill.addEventListener('click', function() {
+      var filter = pill.dataset.filter;
+      var value = pill.dataset.value;
+
+      // Update active pill in this group
+      document.querySelectorAll('[data-filter="' + filter + '"]').forEach(function(p) {
+        p.classList.remove('active');
+      });
+      pill.classList.add('active');
+
+      if (filter === 'level') activeLevel = value;
+      if (filter === 'topic') activeTopic = value;
+
+      filterCards();
+    });
+  });
+</script>
