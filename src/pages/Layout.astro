@@ -1,5 +1,6 @@
 ---
-const { title = "Mikey Higgs" } = Astro.props;
+const { title = "Mikey Higgs", bare = false } = Astro.props;
+const catImages = Object.keys(import.meta.glob('/public/images/cats/*', { eager: true })).map(p => p.replace('/public', ''));
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -8,386 +9,314 @@ const { title = "Mikey Higgs" } = Astro.props;
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>{title}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 </head>
 <body>
   <div class="wrapper">
-    <nav>
-      <div class="nav-inner">
-        <a class="nav-brand" href="/">Mikey <em>Higgs</em></a>
-        <ul class="nav-links">
-          <li><a href="/teachertools">Teacher Tools</a></li>
-          <li><a href="/writing">Writing</a></li>
-          <li><a href="/videos">Videos</a></li>
-        </ul>
-      </div>
-    </nav>
+    {!bare && (
+      <nav>
+        <div class="nav-inner">
+          <a class="nav-brand" href="/">M<span id="secret-i">i</span>key <em>Higgs</em></a>
+          <ul class="nav-links">
+            <li><a href="/teachertools">Teacher Tools</a></li>
+            <li><a href="/writing">Writing</a></li>
+            <li><a href="/videos">Videos</a></li>
+            <li><a href="/worksheets">Worksheets</a></li>
+          </ul>
+        </div>
+      </nav>
+    )}
     <slot />
+    {!bare && (
+      <footer>
+        <span class="footer-name">Mikey <em>Higgs</em></span>
+        <div class="footer-links">
+          <a href="https://github.com/mikeyhiggs" target="_blank">GitHub</a>
+          <a href="https://bsky.app/profile/asymptopic.com" target="_blank">Bluesky</a>
+          <a href="https://youtube.com/@mikey-higgs" target="_blank">YouTube</a>
+          <a href="mailto:hello@mikeyhiggs.net">Contact</a>
+        </div>
+      </footer>
+    )}
   </div>
-</body>
 
-<style is:global>
+  <!-- ── Secret modal ── -->
+  <div id="secret-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);align-items:center;justify-content:center;">
+    <div id="secret-box" style="background:var(--bg);border:1.5px solid var(--rule);border-radius:12px;padding:2rem;max-width:380px;width:90%;position:relative;transform:translateY(20px);opacity:0;transition:all 0.25s ease;">
+      <div style="font-family:'DM Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--orange);margin-bottom:0.75rem;">Secret utilities</div>
+      <h3 style="font-family:Georgia,serif;font-size:1.4rem;font-weight:bold;color:var(--ink);margin:0 0 0.25rem;">You found it. 🎉</h3>
+      <p style="font-size:0.85rem;color:var(--muted);margin:0 0 1.5rem;font-family:'Atkinson Hyperlegible',sans-serif;">These tools aren't linked anywhere on the site.</p>
+      <div style="display:flex;flex-direction:column;gap:0.6rem;">
+        <a href="/studio" class="secret-link">
+          <span class="secret-link-title">Thumbnail Generator</span>
+          <span class="secret-link-arrow">→</span>
+        </a>
+        <a href="/worksheet-generator" class="secret-link">
+          <span class="secret-link-title">Worksheet Generator</span>
+          <span class="secret-link-arrow">→</span>
+        </a>
+      </div>
+      <button id="secret-close" style="position:absolute;top:1rem;right:1rem;background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--muted);line-height:1;">✕</button>
+    </div>
+  </div>
+
+  <!-- ── Cat drop ── -->
+  <div id="cat-drop" style="position:fixed;top:-320px;left:50%;transform:translateX(-50%);z-index:9998;transition:top 0.5s cubic-bezier(0.34,1.56,0.64,1);text-align:center;pointer-events:none;">
+    <div style="background:var(--bg);border:1.5px solid var(--rule);border-radius:0 0 12px 12px;padding:0.75rem 1.25rem 1rem;box-shadow:0 8px 32px rgba(0,0,0,0.15);">
+      <img id="cat-img" src={catImages.length > 0 ? catImages[0] : '/images/cats/cat.jpg'} alt="The cats" style="width:240px;height:180px;object-fit:cover;border-radius:8px;display:block;"/>
+      <p style="font-family:'DM Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--orange);margin:0.6rem 0 0;">meet the team</p>
+    </div>
+  </div>
+
+  <!-- ── Konami banner ── -->
+  <div id="konami-banner">🎮 cheat code activated</div>
+
+  <script is:inline define:vars={{ catImages }}>
+  (function() {
+    if (window.__siteReady) return;
+    window.__siteReady = true;
+
+    // ── Secret modal — click the "i" 5 times ──
+    var secretI  = document.getElementById('secret-i');
+    var modal    = document.getElementById('secret-modal');
+    var box      = document.getElementById('secret-box');
+    var closeBtn = document.getElementById('secret-close');
+    var count = 0, secretTimer;
+
+    if (secretI) {
+      secretI.addEventListener('click', function(e) {
+        e.preventDefault();
+        count++;
+        clearTimeout(secretTimer);
+        secretTimer = setTimeout(function() { count = 0; }, 1500);
+        if (count >= 5) {
+          count = 0;
+          clearTimeout(secretTimer);
+          modal.style.display = 'flex';
+          requestAnimationFrame(function() {
+            requestAnimationFrame(function() {
+              box.style.transform = 'translateY(0)';
+              box.style.opacity = '1';
+            });
+          });
+        }
+      });
+    }
+
+    function closeModal() {
+      box.style.transform = 'translateY(20px)';
+      box.style.opacity = '0';
+      setTimeout(function() { modal.style.display = 'none'; }, 250);
+    }
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (modal) modal.addEventListener('click', function(e) { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && modal && modal.style.display === 'flex') closeModal(); });
+
+    // ── Meow — cat drop ──
+    console.log('[easter egg] catImages:', catImages);
+    var meowBuffer = '';
+    var catDrop = document.getElementById('cat-drop');
+    var catTimer;
+
+    document.addEventListener('keydown', function(e) {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      meowBuffer += e.key.toLowerCase();
+      if (meowBuffer.length > 4) meowBuffer = meowBuffer.slice(-4);
+      if (meowBuffer === 'meow') {
+        meowBuffer = '';
+        if (catImages && catImages.length > 0) {
+          var pick = catImages[Math.floor(Math.random() * catImages.length)];
+          document.getElementById('cat-img').src = pick;
+        }
+        if (catDrop) {
+          catDrop.style.top = '0px';
+          clearTimeout(catTimer);
+          catTimer = setTimeout(function() { catDrop.style.top = '-320px'; }, 3000);
+        }
+        clearTimeout(catTimer);
+        catTimer = setTimeout(function() { catDrop.style.top = '-320px'; }, 3000);
+      }
+    });
+
+    // ── Konami code ──
+    var KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+    var konamiBuffer = [];
+    var banner = document.getElementById('konami-banner');
+    var konamiTimer;
+
+    document.addEventListener('keydown', function(e) {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      konamiBuffer.push(e.key);
+      if (konamiBuffer.length > KONAMI.length) konamiBuffer.shift();
+      if (konamiBuffer.join(',') === KONAMI.join(',')) {
+        konamiBuffer = [];
+        triggerKonami();
+      }
+    });
+
+    function triggerKonami() {
+      var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      var nodes = [];
+      while (walker.nextNode()) {
+        var node = walker.currentNode;
+        if (node.parentElement.closest('#cat-drop,#konami-banner,#secret-modal,script,style')) continue;
+        if (/[∫∑√π÷×±∞∂θλμσ≈≠∈Δ%+\-=0-9]/.test(node.textContent)) nodes.push(node);
+      }
+      nodes.forEach(function(node) {
+        var parent = node.parentElement;
+        var text = node.textContent;
+        var html = text.replace(/([∫∑√π÷×±∞∂θλμσ≈≠∈Δ%+\-=0-9])/g, function(ch) {
+          return '<span class="konami-wobble" style="animation-delay:' + (Math.random()*400).toFixed(0) + 'ms">' + ch + '</span>';
+        });
+        var wrapper = document.createElement('span');
+        wrapper.innerHTML = html;
+        parent.replaceChild(wrapper, node);
+        setTimeout(function() { if (wrapper.parentElement) wrapper.outerHTML = text; }, 1200);
+      });
+      banner.style.bottom = '32px';
+      clearTimeout(konamiTimer);
+      konamiTimer = setTimeout(function() { banner.style.bottom = '-80px'; }, 2500);
+    }
+  })();
+  </script>
+
+  <style is:global>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    :root {
+      --orange: #E8601C;
+      --ink:    #1C1C1E;
+      --muted:  #6B6B6B;
+      --rule:   #E5E5E0;
+      --bg:     #FAFAF8;
+    }
 
-:root {
-  --orange: #E8601C;
-  --ink:    #1C1C1E;
-  --muted:  #6B6B6B;
-  --rule:   #E5E5E0;
-  --bg:     #FAFAF8;
-}
+    html { -webkit-font-smoothing: antialiased; }
 
-html { -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: 'Atkinson Hyperlegible', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 1rem;
+      line-height: 1.6;
+    }
 
-body {
-  font-family: 'Atkinson Hyperlegible', sans-serif;
-  background: var(--bg);
-  color: var(--ink);
-  font-size: 1rem;
-  line-height: 1.6;
-}
+    a { color: var(--orange); text-decoration: none; }
+    a:hover { text-decoration: underline; }
 
-a { color: var(--orange); text-decoration: none; }
-a:hover { text-decoration: underline; }
+    .wrapper { max-width: 680px; margin: 0 auto; padding: 0 1.5rem; }
 
-/* ── Layout ── */
-.wrapper {
-  max-width: 680px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-}
+    /* ── Nav ── */
+    nav { padding: 1.5rem 0; border-bottom: 1px solid var(--rule); }
+    .nav-inner { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 1rem; }
+    .nav-brand { font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 500; color: var(--ink); letter-spacing: -0.02em; text-decoration: none; }
+    .nav-brand em { font-style: italic; color: var(--orange); }
+    #secret-i { cursor: default; }
+    .nav-links { display: flex; gap: 1.75rem; list-style: none; }
+    .nav-links a { font-size: 0.875rem; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+    .nav-links a:hover { color: var(--ink); }
 
-/* ── Nav ── */
-nav {
-  padding: 1.5rem 0;
-  border-bottom: 1px solid var(--rule);
-}
+    /* ── Sections ── */
+    section { padding: 3rem 0; border-bottom: 1px solid var(--rule); }
+    section:last-of-type { border-bottom: none; }
+    .section-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.5rem; }
+    h2 { font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 500; letter-spacing: -0.02em; color: var(--ink); }
+    h2 em { font-style: italic; color: var(--orange); }
+    .section-link { font-size: 0.8rem; color: var(--muted); }
+    .section-link:hover { color: var(--orange); }
 
-.nav-inner {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
+    /* ── Hero ── */
+    .hero { padding: 4rem 0 3rem; border-bottom: 1px solid var(--rule); }
+    .hero-kicker { font-size: 0.8rem; color: var(--muted); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem; }
+    .hero-kicker::before { content: ''; display: inline-block; width: 1.5rem; height: 1.5px; background: var(--orange); }
+    h1 { font-family: 'Fraunces', serif; font-size: clamp(2.4rem, 6vw, 3.8rem); font-weight: 500; line-height: 1.05; letter-spacing: -0.03em; color: var(--ink); margin-bottom: 1rem; }
+    h1 em { font-style: italic; color: var(--orange); }
+    .hero-bio { font-size: 1rem; color: var(--muted); line-height: 1.75; max-width: 520px; margin-bottom: 1.75rem; }
+    .hero-bio strong { color: var(--ink); font-weight: 700; }
+    .hero-links { display: flex; gap: 0.75rem; flex-wrap: wrap; }
 
-.nav-brand {
-  font-family: 'Fraunces', serif;
-  font-size: 1.15rem;
-  font-weight: 500;
-  color: var(--ink);
-  letter-spacing: -0.02em;
-  text-decoration: none;
-}
+    /* ── Buttons ── */
+    .btn { display: inline-block; font-family: 'Atkinson Hyperlegible', sans-serif; font-size: 0.875rem; font-weight: 700; padding: 0.6rem 1.25rem; border-radius: 6px; text-decoration: none; transition: all 0.15s; cursor: pointer; border: none; }
+    .btn-filled { background: var(--orange); color: white; }
+    .btn-filled:hover { background: #cf551a; text-decoration: none; }
+    .btn-outline { background: transparent; color: var(--ink); border: 1.5px solid var(--rule); }
+    .btn-outline:hover { border-color: var(--ink); text-decoration: none; }
 
-.nav-brand em {
-  font-style: italic;
-  color: var(--orange);
-}
+    /* ── Project card ── */
+    .project-card { border: 1.5px solid var(--rule); border-radius: 8px; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; transition: border-color 0.15s; text-decoration: none; color: inherit; }
+    .project-card:hover { border-color: var(--orange); text-decoration: none; }
+    .project-card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .project-title { font-family: 'Fraunces', serif; font-size: 1.1rem; font-weight: 500; letter-spacing: -0.01em; color: var(--ink); }
+    .project-status { font-size: 0.68rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 999px; letter-spacing: 0.05em; text-transform: uppercase; flex-shrink: 0; }
+    .status-live { background: #E8F5ED; color: #2D9E4F; }
+    .status-wip  { background: #FEF3EC; color: var(--orange); }
+    .project-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
+    .project-tag { font-size: 0.72rem; color: var(--muted); margin-top: 0.25rem; }
 
-.nav-links {
-  display: flex;
-  gap: 1.75rem;
-  list-style: none;
-}
+    /* ── Post list ── */
+    .post-list { display: flex; flex-direction: column; }
+    .post-item { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 0.9rem 0; border-bottom: 1px solid var(--rule); text-decoration: none; color: inherit; transition: color 0.15s; }
+    .post-item:first-child { padding-top: 0; }
+    .post-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .post-item:hover .post-title { color: var(--orange); }
+    .post-title { font-size: 0.95rem; font-weight: 400; color: var(--ink); transition: color 0.15s; line-height: 1.4; }
+    .post-date { font-size: 0.78rem; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
 
-.nav-links a {
-  font-size: 0.875rem;
-  color: var(--muted);
-  text-decoration: none;
-  transition: color 0.15s;
-}
+    /* ── YouTube placeholder ── */
+    .yt-placeholder { border: 1.5px dashed var(--rule); border-radius: 8px; padding: 2.5rem 1.5rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
+    .yt-icon { font-size: 2rem; opacity: 0.4; }
+    .yt-label { font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 500; color: var(--muted); }
+    .yt-sub { font-size: 0.825rem; color: var(--muted); max-width: 320px; line-height: 1.6; }
 
-.nav-links a:hover { color: var(--ink); }
+    /* ── Footer ── */
+    footer { padding: 2.5rem 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .footer-name { font-family: 'Fraunces', serif; font-size: 0.9rem; font-weight: 500; color: var(--muted); letter-spacing: -0.01em; }
+    .footer-name em { font-style: italic; color: var(--orange); }
+    .footer-links { display: flex; gap: 1.25rem; }
+    .footer-links a { font-size: 0.8rem; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+    .footer-links a:hover { color: var(--orange); }
 
-/* ── Sections ── */
-section {
-  padding: 3rem 0;
-  border-bottom: 1px solid var(--rule);
-}
+    /* ── Secret modal ── */
+    .secret-link { display: flex; align-items: center; justify-content: space-between; padding: 0.7rem 1rem; border: 1.5px solid var(--rule); border-radius: 8px; text-decoration: none; color: var(--ink); font-family: 'Atkinson Hyperlegible', sans-serif; font-size: 0.9rem; transition: border-color 0.15s, color 0.15s; }
+    .secret-link:hover { border-color: var(--orange); color: var(--orange); text-decoration: none; }
+    .secret-link-title { font-weight: 600; }
+    .secret-link-arrow { color: var(--muted); font-size: 1rem; }
 
-section:last-of-type { border-bottom: none; }
+    /* ── Easter eggs ── */
+    @keyframes wobble {
+      0%   { transform: rotate(0deg); }
+      25%  { transform: rotate(-8deg) scale(1.15); }
+      50%  { transform: rotate(8deg) scale(0.9); }
+      75%  { transform: rotate(-4deg) scale(1.05); }
+      100% { transform: rotate(0deg); }
+    }
+    .konami-wobble { animation: wobble 0.5s ease-in-out !important; display: inline-block; }
 
-/* ── Section header ── */
-.section-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 1.5rem;
-}
+    #konami-banner {
+      position: fixed;
+      bottom: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9998;
+      background: var(--ink);
+      color: var(--bg);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      padding: 0.6rem 1.5rem;
+      border-radius: 999px;
+      white-space: nowrap;
+      transition: bottom 0.4s cubic-bezier(0.34,1.56,0.64,1);
+      pointer-events: none;
+    }
 
-h2 {
-  font-family: 'Fraunces', serif;
-  font-size: 1.3rem;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-}
-
-h2 em { font-style: italic; color: var(--orange); }
-
-.section-link {
-  font-size: 0.8rem;
-  color: var(--muted);
-}
-
-.section-link:hover { color: var(--orange); }
-
-/* ── Hero ── */
-.hero {
-  padding: 4rem 0 3rem;
-  border-bottom: 1px solid var(--rule);
-}
-
-.hero-kicker {
-  font-size: 0.8rem;
-  color: var(--muted);
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.hero-kicker::before {
-  content: '';
-  display: inline-block;
-  width: 1.5rem;
-  height: 1.5px;
-  background: var(--orange);
-}
-
-h1 {
-  font-family: 'Fraunces', serif;
-  font-size: clamp(2.4rem, 6vw, 3.8rem);
-  font-weight: 500;
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-  color: var(--ink);
-  margin-bottom: 1rem;
-}
-
-h1 em {
-  font-style: italic;
-  color: var(--orange);
-}
-
-.hero-bio {
-  font-size: 1rem;
-  color: var(--muted);
-  line-height: 1.75;
-  max-width: 520px;
-  margin-bottom: 1.75rem;
-}
-
-.hero-bio strong { color: var(--ink); font-weight: 700; }
-
-.hero-links {
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.btn {
-  display: inline-block;
-  font-family: 'Atkinson Hyperlegible', sans-serif;
-  font-size: 0.875rem;
-  font-weight: 700;
-  padding: 0.6rem 1.25rem;
-  border-radius: 6px;
-  text-decoration: none;
-  transition: all 0.15s;
-  cursor: pointer;
-  border: none;
-}
-
-.btn-filled {
-  background: var(--orange);
-  color: white;
-}
-
-.btn-filled:hover {
-  background: #cf551a;
-  text-decoration: none;
-}
-
-.btn-outline {
-  background: transparent;
-  color: var(--ink);
-  border: 1.5px solid var(--rule);
-}
-
-.btn-outline:hover {
-  border-color: var(--ink);
-  text-decoration: none;
-}
-
-/* ── Project card ── */
-.project-card {
-  border: 1.5px solid var(--rule);
-  border-radius: 8px;
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  transition: border-color 0.15s;
-  text-decoration: none;
-  color: inherit;
-}
-
-.project-card:hover {
-  border-color: var(--orange);
-  text-decoration: none;
-}
-
-.project-card-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.project-title {
-  font-family: 'Fraunces', serif;
-  font-size: 1.1rem;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-}
-
-.project-status {
-  font-size: 0.68rem;
-  font-weight: 700;
-  padding: 0.2rem 0.6rem;
-  border-radius: 999px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  flex-shrink: 0;
-}
-
-.status-live { background: #E8F5ED; color: #2D9E4F; }
-.status-wip  { background: #FEF3EC; color: var(--orange); }
-
-.project-desc {
-  font-size: 0.875rem;
-  color: var(--muted);
-  line-height: 1.65;
-}
-
-.project-tag {
-  font-size: 0.72rem;
-  color: var(--muted);
-  margin-top: 0.25rem;
-}
-
-/* ── Blog list ── */
-.post-list {
-  display: flex;
-  flex-direction: column;
-}
-
-.post-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 1rem;
-  padding: 0.9rem 0;
-  border-bottom: 1px solid var(--rule);
-  text-decoration: none;
-  color: inherit;
-  transition: color 0.15s;
-}
-
-.post-item:first-child { padding-top: 0; }
-.post-item:last-child { border-bottom: none; padding-bottom: 0; }
-
-.post-item:hover .post-title { color: var(--orange); }
-
-.post-title {
-  font-size: 0.95rem;
-  font-weight: 400;
-  color: var(--ink);
-  transition: color 0.15s;
-  line-height: 1.4;
-}
-
-.post-date {
-  font-size: 0.78rem;
-  color: var(--muted);
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-/* ── YouTube section ── */
-.yt-placeholder {
-  border: 1.5px dashed var(--rule);
-  border-radius: 8px;
-  padding: 2.5rem 1.5rem;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.yt-icon {
-  font-size: 2rem;
-  opacity: 0.4;
-}
-
-.yt-label {
-  font-family: 'Fraunces', serif;
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--muted);
-}
-
-.yt-sub {
-  font-size: 0.825rem;
-  color: var(--muted);
-  max-width: 320px;
-  line-height: 1.6;
-}
-
-/* ── Footer ── */
-footer {
-  padding: 2.5rem 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.footer-name {
-  font-family: 'Fraunces', serif;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--muted);
-  letter-spacing: -0.01em;
-}
-
-.footer-name em { font-style: italic; color: var(--orange); }
-
-.footer-links {
-  display: flex;
-  gap: 1.25rem;
-}
-
-.footer-links a {
-  font-size: 0.8rem;
-  color: var(--muted);
-  text-decoration: none;
-  transition: color 0.15s;
-}
-
-.footer-links a:hover { color: var(--orange); }
-
-@media (max-width: 480px) {
-  .nav-links { gap: 1.1rem; }
-  h1 { font-size: 2.2rem; }
-  .section-head { flex-direction: column; gap: 0.25rem; }
-}
-
-
+    /* ── Responsive ── */
+    @media (max-width: 480px) {
+      .nav-links { gap: 1.1rem; }
+      h1 { font-size: 2.2rem; }
+      .section-head { flex-direction: column; gap: 0.25rem; }
+    }
   </style>
+
+</body>
 </html>

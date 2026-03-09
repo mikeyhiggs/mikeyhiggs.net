@@ -8,320 +8,271 @@ import Layout from '../layouts/Layout.astro';
       <h2>Thumbnail Generator</h2>
     </div>
 
+    <div class="type-switcher">
+      <button class="type-btn active" id="type-standard">Standard</button>
+      <button class="type-btn" id="type-question">Big Question</button>
+    </div>
+
     <div class="studio-layout">
 
+      <!-- ── CONTROLS ── -->
       <div class="controls">
 
-        <div class="field">
-          <label>Title</label>
-          <input type="text" id="input-title" value="Simplifying Ratios"/>
-        </div>
-
-        <div class="field">
-          <label>Level</label>
-          <select id="input-level">
-            <option>GCSE Maths</option>
-            <option>A Level Maths</option>
-            <option>KS3 Maths</option>
-            <option>Further Maths</option>
-            <option>Primary Maths</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <div class="label-row">
-            <label>Title Size</label>
-            <span class="label-value" id="size-value">220</span>
+        <!-- Standard controls -->
+        <div id="controls-standard" class="ctrl-group">
+          <div class="field">
+            <label>Title</label>
+            <input type="text" id="input-title" value="Simplifying Ratios"/>
           </div>
-          <input type="range" id="input-size" min="60" max="220" value="220"/>
-        </div>
-
-        <div class="field">
-          <div class="label-row">
-            <label>Level Size</label>
-            <span class="label-value" id="level-size-value">80</span>
+          <div class="field">
+            <label>Level</label>
+            <select id="input-level">
+              <option>GCSE Maths</option>
+              <option>A Level Maths</option>
+              <option>KS3 Maths</option>
+              <option>Further Maths</option>
+              <option>Primary Maths</option>
+            </select>
           </div>
-          <input type="range" id="input-level-size" min="14" max="80" value="80"/>
-        </div>
-
-        <div class="field">
-          <div class="label-row">
-            <label>MH Size</label>
-            <span class="label-value" id="mh-size-value">100</span>
+          <div class="field">
+            <div class="label-row"><label>Title Size</label><span class="label-value" id="size-value">220</span></div>
+            <input type="range" id="input-size" min="60" max="220" value="220"/>
           </div>
-          <input type="range" id="input-mh-size" min="14" max="100" value="100"/>
-        </div>
-
-        <div class="field">
-          <div class="label-row">
-            <label>Symbol Size</label>
-            <span class="label-value" id="sym-size-value">295</span>
+          <div class="field">
+            <div class="label-row"><label>Level Size</label><span class="label-value" id="level-size-value">80</span></div>
+            <input type="range" id="input-level-size" min="14" max="80" value="80"/>
           </div>
-          <input type="range" id="input-sym-size" min="50" max="600" value="295"/>
-        </div>
-
-        <div class="field">
-          <label>Symbol</label>
-          <div class="sym-group-label">General</div>
-          <div class="symbol-grid">
-            <button class="sym-btn active" data-sym="÷">÷</button>
-            <button class="sym-btn" data-sym=":">:</button>
-            <button class="sym-btn" data-sym="×">×</button>
-            <button class="sym-btn" data-sym="+">+</button>
-            <button class="sym-btn" data-sym="−">−</button>
-            <button class="sym-btn" data-sym="=">=</button>
-            <button class="sym-btn" data-sym="≠">≠</button>
-            <button class="sym-btn" data-sym="<">&lt;</button>
-            <button class="sym-btn" data-sym=">">&gt;</button>
-            <button class="sym-btn" data-sym="%">%</button>
+          <div class="field">
+            <div class="label-row"><label>MH Size</label><span class="label-value" id="mh-size-value">100</span></div>
+            <input type="range" id="input-mh-size" min="14" max="100" value="100"/>
           </div>
-          <div class="sym-group-label">GCSE</div>
-          <div class="symbol-grid">
-            <button class="sym-btn" data-sym="²">²</button>
-            <button class="sym-btn" data-sym="³">³</button>
-            <button class="sym-btn" data-sym="√">√</button>
-            <button class="sym-btn" data-sym="∛">∛</button>
-            <button class="sym-btn" data-sym="π">π</button>
-            <button class="sym-btn" data-sym="°">°</button>
-            <button class="sym-btn" data-sym="∠">∠</button>
-            <button class="sym-btn" data-sym="△">△</button>
-            <button class="sym-btn" data-sym="∝">∝</button>
-            <button class="sym-btn" data-sym="≈">≈</button>
+          <div class="field">
+            <div class="label-row"><label>Symbol Size</label><span class="label-value" id="sym-size-value">295</span></div>
+            <input type="range" id="input-sym-size" min="50" max="600" value="295"/>
           </div>
-          <div class="sym-group-label">A Level</div>
-          <div class="symbol-grid">
-            <button class="sym-btn" data-sym="∑">∑</button>
-            <button class="sym-btn" data-sym="∫">∫</button>
-            <button class="sym-btn" data-sym="∞">∞</button>
-            <button class="sym-btn" data-sym="∂">∂</button>
-            <button class="sym-btn" data-sym="Δ">Δ</button>
-            <button class="sym-btn" data-sym="θ">θ</button>
-            <button class="sym-btn" data-sym="λ">λ</button>
-            <button class="sym-btn" data-sym="μ">μ</button>
-            <button class="sym-btn" data-sym="σ">σ</button>
-            <button class="sym-btn" data-sym="∈">∈</button>
+          <div class="field">
+            <label>Symbol</label>
+            <div class="sym-group-label">General</div>
+            <div class="symbol-grid">
+              <button class="sym-btn active" data-sym="÷">÷</button>
+              <button class="sym-btn" data-sym=":">:</button>
+              <button class="sym-btn" data-sym="×">×</button>
+              <button class="sym-btn" data-sym="+">+</button>
+              <button class="sym-btn" data-sym="−">−</button>
+              <button class="sym-btn" data-sym="=">=</button>
+              <button class="sym-btn" data-sym="≠">≠</button>
+              <button class="sym-btn" data-sym="<">&lt;</button>
+              <button class="sym-btn" data-sym=">">&gt;</button>
+              <button class="sym-btn" data-sym="%">%</button>
+            </div>
+            <div class="sym-group-label">GCSE</div>
+            <div class="symbol-grid">
+              <button class="sym-btn" data-sym="²">²</button>
+              <button class="sym-btn" data-sym="³">³</button>
+              <button class="sym-btn" data-sym="√">√</button>
+              <button class="sym-btn" data-sym="∛">∛</button>
+              <button class="sym-btn" data-sym="π">π</button>
+              <button class="sym-btn" data-sym="°">°</button>
+              <button class="sym-btn" data-sym="∠">∠</button>
+              <button class="sym-btn" data-sym="△">△</button>
+              <button class="sym-btn" data-sym="∝">∝</button>
+              <button class="sym-btn" data-sym="≈">≈</button>
+            </div>
+            <div class="sym-group-label">A Level</div>
+            <div class="symbol-grid">
+              <button class="sym-btn" data-sym="∑">∑</button>
+              <button class="sym-btn" data-sym="∫">∫</button>
+              <button class="sym-btn" data-sym="∞">∞</button>
+              <button class="sym-btn" data-sym="∂">∂</button>
+              <button class="sym-btn" data-sym="Δ">Δ</button>
+              <button class="sym-btn" data-sym="θ">θ</button>
+              <button class="sym-btn" data-sym="λ">λ</button>
+              <button class="sym-btn" data-sym="μ">μ</button>
+              <button class="sym-btn" data-sym="σ">σ</button>
+              <button class="sym-btn" data-sym="∈">∈</button>
+            </div>
+          </div>
+          <div class="field">
+            <label>Colour</label>
+            <div class="color-grid">
+              <div class="color-btn s-col active" style="background:#E8601C" data-color="#E8601C"></div>
+              <div class="color-btn s-col" style="background:#1C1C1E" data-color="#1C1C1E"></div>
+              <div class="color-btn s-col" style="background:#2D6A4F" data-color="#2D6A4F"></div>
+              <div class="color-btn s-col" style="background:#3A5F8A" data-color="#3A5F8A"></div>
+              <div class="color-btn s-col" style="background:#7B2D8B" data-color="#7B2D8B"></div>
+            </div>
           </div>
         </div>
 
-        <div class="field">
-          <label>Colour</label>
-          <div class="color-grid">
-            <div class="color-btn active" style="background:#E8601C" data-color="#E8601C"></div>
-            <div class="color-btn" style="background:#1C1C1E" data-color="#1C1C1E"></div>
-            <div class="color-btn" style="background:#2D6A4F" data-color="#2D6A4F"></div>
-            <div class="color-btn" style="background:#3A5F8A" data-color="#3A5F8A"></div>
-            <div class="color-btn" style="background:#7B2D8B" data-color="#7B2D8B"></div>
+        <!-- Big Question controls -->
+        <div id="controls-question" class="ctrl-group" style="display:none;">
+          <div class="field">
+            <label>Level</label>
+            <select id="input-q-level">
+              <option>GCSE Maths</option>
+              <option>A Level Maths</option>
+              <option>KS3 Maths</option>
+              <option>Further Maths</option>
+              <option>Primary Maths</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Caption</label>
+            <input type="text" id="input-caption" value="Can you solve this?" placeholder="e.g. When LATE Fails!"/>
+          </div>
+          <div class="field">
+            <div class="label-row"><label>Caption Size</label><span class="label-value" id="cap-size-value">38</span></div>
+            <input type="range" id="input-cap-size" min="14" max="80" value="38"/>
+          </div>
+          <div class="field">
+            <label>Caption Colour</label>
+            <div class="color-grid">
+              <div class="color-btn qc-col active" style="background:#E8601C" data-color="#E8601C"></div>
+              <div class="color-btn qc-col" style="background:#FFFFFF" data-color="#FFFFFF"></div>
+              <div class="color-btn qc-col" style="background:#F5C842" data-color="#F5C842"></div>
+              <div class="color-btn qc-col" style="background:#A8E6A3" data-color="#A8E6A3"></div>
+              <div class="color-btn qc-col" style="background:#9FB8E8" data-color="#9FB8E8"></div>
+            </div>
+          </div>
+          <div class="field">
+            <label>Question (wrap maths in $...$)</label>
+            <textarea id="input-question" rows="3">Find $\int x^2\,dx$</textarea>
+          </div>
+          <div class="field">
+            <div class="label-row"><label>Question Size</label><span class="label-value" id="q-size-value">120</span></div>
+            <input type="range" id="input-q-size" min="30" max="180" value="120"/>
+          </div>
+          <div class="field">
+            <label>Background</label>
+            <div class="color-grid">
+              <div class="color-btn q-col" style="background:#E8601C" data-color="#E8601C"></div>
+              <div class="color-btn q-col active" style="background:#1C1C1E" data-color="#1C1C1E"></div>
+              <div class="color-btn q-col" style="background:#2D6A4F" data-color="#2D6A4F"></div>
+              <div class="color-btn q-col" style="background:#3A5F8A" data-color="#3A5F8A"></div>
+              <div class="color-btn q-col" style="background:#7B2D8B" data-color="#7B2D8B"></div>
+            </div>
+          </div>
+          <div class="field">
+            <label>Question Colour</label>
+            <div class="color-grid">
+              <div class="color-btn qt-col active" style="background:#FFFFFF" data-color="#FFFFFF"></div>
+              <div class="color-btn qt-col" style="background:#E8601C" data-color="#E8601C"></div>
+              <div class="color-btn qt-col" style="background:#F5C842" data-color="#F5C842"></div>
+            </div>
           </div>
         </div>
 
-        <button class="dl-btn" id="dl-btn">⬇ Download PNG (1280×720)</button>
-
+        <button class="dl-btn" id="dl-btn">⬇ Download PNG (2560×1440)</button>
       </div>
 
+      <!-- ── PREVIEW ── -->
       <div class="preview-wrap">
         <span class="preview-label">Preview</span>
+
+        <!-- Standard preview — title uses Georgia to avoid variable font ghosting -->
         <div id="thumb" style="width:100%;aspect-ratio:16/9;position:relative;overflow:hidden;border-radius:8px;box-shadow:0 8px 32px rgba(0,0,0,0.15);background:#E8601C;">
           <div id="thumb-slash" style="position:absolute;top:-20%;right:18%;width:14%;height:160%;background:rgba(0,0,0,0.12);transform:rotate(12deg);"></div>
           <div id="thumb-symbol" style="position:absolute;bottom:-0.1em;right:-0.02em;font-family:Georgia,serif;font-weight:bold;color:rgba(0,0,0,0.10);line-height:1;white-space:nowrap;pointer-events:none;">÷</div>
           <div id="thumb-tag" style="position:absolute;top:6%;left:4.5%;font-family:'DM Mono',monospace;font-weight:500;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.75);white-space:nowrap;">GCSE MATHS</div>
-          <div id="thumb-mh" style="position:absolute;top:5%;right:4.5%;font-family:'Fraunces',serif;font-weight:300;color:rgba(255,255,255,0.5);">MH</div>
-          <div id="thumb-title" style="position:absolute;left:4.5%;right:4.5%;bottom:4%;font-family:'Fraunces',serif;font-weight:800;color:white;letter-spacing:-0.04em;line-height:0.9;word-break:break-word;">Simplifying Ratios</div>
+          <div id="thumb-mh" style="position:absolute;top:5%;right:4.5%;font-family:'DM Mono',monospace;font-weight:500;color:rgba(255,255,255,0.5);">MH</div>
+          <div id="thumb-title" style="position:absolute;left:4.5%;right:4.5%;bottom:4%;font-family:Georgia,serif;font-weight:bold;color:white;letter-spacing:-0.02em;line-height:0.9;word-break:break-word;">Simplifying Ratios</div>
         </div>
+
+        <!-- Big Question preview -->
+        <div id="thumb-q" style="display:none;width:100%;aspect-ratio:16/9;position:relative;overflow:hidden;border-radius:8px;box-shadow:0 8px 32px rgba(0,0,0,0.15);background:#1C1C1E;">
+          <div id="tq-accent" style="position:absolute;top:0;left:0;width:6px;height:100%;background:#E8601C;"></div>
+          <div id="tq-stripe" style="position:absolute;top:0;left:0;right:0;height:18%;background:rgba(255,255,255,0.06);border-bottom:2px solid rgba(255,255,255,0.08);display:flex;align-items:center;padding:0 4.5%;gap:0.5em;">
+            <span id="tq-tag" style="font-family:'DM Mono',monospace;font-weight:500;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.7);">GCSE MATHS</span>
+            <span id="tq-mh" style="margin-left:auto;font-family:'DM Mono',monospace;font-weight:500;color:rgba(255,255,255,0.35);">MH</span>
+          </div>
+          <div id="tq-caption" style="position:absolute;left:6%;top:23%;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.12em;color:#E8601C;font-weight:500;">CAN YOU SOLVE THIS?</div>
+          <div id="tq-question" style="position:absolute;left:6%;right:5%;top:36%;bottom:6%;display:flex;align-items:center;color:white;font-family:Georgia,serif;font-weight:bold;line-height:1.1;overflow:hidden;">Find $\int x^2\,dx$</div>
+        </div>
+
+        <p class="preview-hint" id="preview-hint" style="display:none;margin-top:0.5rem;">Rendering LaTeX…</p>
       </div>
 
     </div>
   </section>
 </Layout>
 
-<canvas id="canvas" width="1280" height="720" style="display:none"></canvas>
+<canvas id="canvas" width="2560" height="1440" style="display:none;"></canvas>
+
+<script is:inline>
+  window.MathJax = {
+    startup: { typeset: false },
+    tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+  };
+</script>
+<script is:inline src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
 <style is:global>
-  .studio-layout {
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    gap: 2rem;
-    align-items: start;
+  .type-switcher { display:flex; gap:0.5rem; margin-bottom:1.5rem; }
+  .type-btn {
+    font-family:'Atkinson Hyperlegible',sans-serif; font-size:0.8rem; font-weight:700;
+    padding:0.45rem 1.1rem; border-radius:6px; border:1.5px solid var(--rule);
+    background:transparent; color:var(--muted); cursor:pointer; transition:all 0.15s;
   }
+  .type-btn:hover { border-color:var(--ink); color:var(--ink); }
+  .type-btn.active { background:var(--ink); border-color:var(--ink); color:var(--bg); }
+
+  .studio-layout { display:grid; grid-template-columns:300px 1fr; gap:2rem; align-items:start; }
 
   .controls {
-    background: white;
-    border-radius: 10px;
-    padding: 1.25rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.1rem;
-    border: 1.5px solid var(--rule);
-    overflow: hidden;
+    background:white; border-radius:10px; padding:1.25rem;
+    display:flex; flex-direction:column; gap:1.1rem; border:1.5px solid var(--rule);
   }
-
-  .controls .field { display: flex; flex-direction: column; gap: 0.4rem; }
-
-  .controls label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.62rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--muted);
+  .ctrl-group { display:flex; flex-direction:column; gap:1.1rem; }
+  .controls .field { display:flex; flex-direction:column; gap:0.4rem; }
+  .controls label { font-family:'DM Mono',monospace; font-size:0.62rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); }
+  .label-row { display:flex; justify-content:space-between; align-items:center; }
+  .label-value { font-family:'DM Mono',monospace; font-size:0.62rem; color:var(--orange); }
+  .controls input[type="text"], .controls select, .controls textarea {
+    font-family:'Atkinson Hyperlegible',sans-serif; font-size:0.875rem;
+    padding:0.55rem 0.7rem; border:1.5px solid var(--rule); border-radius:6px;
+    background:var(--bg); color:var(--ink); outline:none; transition:border-color 0.15s;
+    width:100%; resize:vertical;
   }
+  .controls input[type="text"]:focus, .controls select:focus, .controls textarea:focus { border-color:var(--orange); }
+  .controls input[type="range"] { width:100%; accent-color:var(--orange); cursor:pointer; }
 
-  .label-row { display: flex; justify-content: space-between; align-items: center; }
+  .sym-group-label { font-family:'DM Mono',monospace; font-size:0.58rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--orange); margin-top:0.3rem; }
+  .symbol-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:0.4rem; }
+  .sym-btn { font-size:1.1rem; padding:0.35rem; border:1.5px solid var(--rule); border-radius:6px; background:var(--bg); cursor:pointer; text-align:center; transition:all 0.15s; color:var(--ink); }
+  .sym-btn:hover { border-color:var(--orange); color:var(--orange); }
+  .sym-btn.active { border-color:var(--orange); background:var(--orange); color:white; }
 
-  .label-value {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.62rem;
-    color: var(--orange);
-  }
-
-  .controls input[type="text"],
-  .controls select {
-    font-family: 'Atkinson Hyperlegible', sans-serif;
-    font-size: 0.875rem;
-    padding: 0.55rem 0.7rem;
-    border: 1.5px solid var(--rule);
-    border-radius: 6px;
-    background: var(--bg);
-    color: var(--ink);
-    outline: none;
-    transition: border-color 0.15s;
-    width: 100%;
-  }
-  .controls input[type="text"]:focus,
-  .controls select:focus { border-color: var(--orange); }
-
-  .controls input[type="range"] { width: 100%; accent-color: var(--orange); cursor: pointer; }
-
-  .sym-group-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.58rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--orange);
-    margin-top: 0.4rem;
-    margin-bottom: 0.1rem;
-  }
-
-  .symbol-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 0.4rem;
-    margin-bottom: 0.1rem;
-  }
-
-  .sym-btn {
-    font-size: 1.1rem;
-    padding: 0.35rem;
-    border: 1.5px solid var(--rule);
-    border-radius: 6px;
-    background: var(--bg);
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.15s;
-    color: var(--ink);
-  }
-  .sym-btn:hover { border-color: var(--orange); color: var(--orange); }
-  .sym-btn.active { border-color: var(--orange); background: var(--orange); color: white; }
-
-  .color-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.4rem; }
-
-  .color-btn {
-    height: 30px;
-    border-radius: 6px;
-    border: 2px solid transparent;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .color-btn.active { border-color: var(--ink); transform: scale(1.1); }
+  .color-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:0.4rem; }
+  .color-btn { height:30px; border-radius:6px; border:2px solid transparent; cursor:pointer; transition:all 0.15s; }
+  .color-btn.active { border-color:white; outline:2px solid var(--ink); transform:scale(1.1); }
 
   .dl-btn {
-    font-family: 'Atkinson Hyperlegible', sans-serif;
-    font-size: 0.875rem;
-    font-weight: 700;
-    padding: 0.7rem 1rem;
-    background: var(--orange);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.15s;
-    width: 100%;
+    font-family:'Atkinson Hyperlegible',sans-serif; font-size:0.875rem; font-weight:700;
+    padding:0.7rem 1rem; background:var(--orange); color:white; border:none;
+    border-radius:6px; cursor:pointer; transition:background 0.15s; width:100%; margin-top:0.25rem;
   }
-  .dl-btn:hover { background: #cf551a; }
+  .dl-btn:hover { background:#cf551a; }
+  .dl-btn:disabled { background:var(--muted); cursor:not-allowed; }
 
-  .preview-wrap { display: flex; flex-direction: column; gap: 0.75rem; }
+  .preview-wrap { display:flex; flex-direction:column; gap:0.5rem; }
+  .preview-label { font-family:'DM Mono',monospace; font-size:0.62rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); }
+  .preview-hint { font-family:'DM Mono',monospace; font-size:0.7rem; color:var(--orange); text-align:center; }
 
-  .preview-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.62rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--muted);
-  }
-
-  #thumb {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    position: relative;
-    overflow: hidden;
-    border-radius: 8px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-  }
-
-  #thumb-slash {
-    position: absolute;
-    top: -20%; right: 18%;
-    width: 14%; height: 160%;
-    background: rgba(0,0,0,0.12);
-    transform: rotate(12deg);
-  }
-
-  #thumb-symbol {
-    position: absolute;
-    bottom: -0.1em; right: -0.02em;
-    font-family: Georgia, serif;
-    font-weight: bold;
-    color: rgba(0,0,0,0.10);
-    line-height: 1;
-    white-space: nowrap;
-    pointer-events: none;
-  }
-
-  #thumb-tag {
-    position: absolute;
-    top: 6%; left: 4.5%;
-    font-family: 'DM Mono', monospace;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: rgba(255,255,255,0.75);
-    white-space: nowrap;
-  }
-
-  #thumb-mh {
-    position: absolute;
-    top: 5%; right: 4.5%;
-    font-family: 'Fraunces', serif;
-    font-weight: 300;
-    color: rgba(255,255,255,0.5);
-  }
-
-  #thumb-title {
-    position: absolute;
-    left: 4.5%; right: 4.5%; bottom: 4%;
-    font-family: 'Fraunces', serif;
-    font-weight: 800;
-    color: white;
-    letter-spacing: -0.04em;
-    line-height: 0.9;
-    word-break: break-word;
-  }
-
-  @media (max-width: 680px) {
-    .studio-layout { grid-template-columns: 1fr; }
-  }
+  @media (max-width:680px) { .studio-layout { grid-template-columns:1fr; } }
 </style>
 
 <script is:inline>
-  var state = {
+(function() {
+  if (window.__studioReady) return;
+  window.__studioReady = true;
+
+  var CW = 2560, CH = 1440;
+  var mode = 'standard';
+  var rendering = false;
+
+  var S = {
     title: 'Simplifying Ratios',
     level: 'GCSE Maths',
     color: '#E8601C',
@@ -332,162 +283,325 @@ import Layout from '../layouts/Layout.astro';
     symSize: 295,
   };
 
-  function updatePreview() {
-    var thumb = document.getElementById('thumb');
-    var W = thumb.offsetWidth;
-    var scale = W / 1280;
+  var Q = {
+    level: 'GCSE Maths',
+    caption: 'Can you solve this?',
+    question: 'Find $\\int x^2\\,dx$',
+    bgColor: '#1C1C1E',
+    textColor: '#FFFFFF',
+    fontSize: 120,
+    captionSize: 38,
+    captionColor: '#E8601C',
+  };
 
-    thumb.style.background = state.color;
-    document.getElementById('thumb-symbol').textContent = state.symbol;
-    document.getElementById('thumb-symbol').style.fontSize = (state.symSize * scale) + 'px';
-    document.getElementById('thumb-tag').textContent = state.level.toUpperCase();
-    document.getElementById('thumb-tag').style.fontSize = (state.levelSize * scale) + 'px';
-    document.getElementById('thumb-mh').style.fontSize = (state.mhSize * scale) + 'px';
-    document.getElementById('thumb-title').textContent = state.title;
-    document.getElementById('thumb-title').style.fontSize = (state.fontSize * scale) + 'px';
+  function el(id) { return document.getElementById(id); }
+
+  // ── Standard preview ──────────────────────────────────
+  function updatePreviewS() {
+    var thumb = el('thumb');
+    var scale = thumb.offsetWidth / 1280;
+    thumb.style.background = S.color;
+    el('thumb-symbol').textContent = S.symbol;
+    el('thumb-symbol').style.fontSize = (S.symSize * scale) + 'px';
+    el('thumb-tag').textContent = S.level.toUpperCase();
+    el('thumb-tag').style.fontSize = (S.levelSize * scale) + 'px';
+    el('thumb-mh').style.fontSize = (S.mhSize * scale) + 'px';
+    el('thumb-title').textContent = S.title;
+    el('thumb-title').style.fontSize = (S.fontSize * scale) + 'px';
   }
 
-  document.getElementById('input-title').addEventListener('input', function() {
-    state.title = this.value;
-    updatePreview();
+  // ── Big Question preview ──────────────────────────────
+  function updatePreviewQ() {
+    var thumb = el('thumb-q');
+    var scale = thumb.offsetWidth / 1280;
+    thumb.style.background = Q.bgColor;
+    var accentCol = Q.textColor === '#FFFFFF' ? '#E8601C' : Q.textColor;
+    el('tq-accent').style.background = accentCol;
+    el('tq-tag').textContent = Q.level.toUpperCase();
+    el('tq-tag').style.fontSize = (50 * scale) + 'px';
+    el('tq-mh').style.fontSize = (50 * scale) + 'px';
+    el('tq-caption').textContent = Q.caption.toUpperCase();
+    el('tq-caption').style.fontSize = (Q.captionSize * scale) + 'px';
+    el('tq-caption').style.color = Q.captionColor;
+    var qDiv = el('tq-question');
+    qDiv.style.fontSize = (Q.fontSize * scale) + 'px';
+    qDiv.style.color = Q.textColor;
+    qDiv.innerHTML = Q.question;
+    if (window.MathJax && MathJax.typesetPromise) {
+      el('preview-hint').style.display = 'block';
+      MathJax.typesetClear([qDiv]);
+      MathJax.typesetPromise([qDiv]).then(function() {
+        el('preview-hint').style.display = 'none';
+      });
+    }
+  }
+
+  // ── Type switcher ─────────────────────────────────────
+  el('type-standard').addEventListener('click', function() {
+    mode = 'standard';
+    el('type-standard').classList.add('active');
+    el('type-question').classList.remove('active');
+    el('controls-standard').style.display = 'flex';
+    el('controls-question').style.display = 'none';
+    el('thumb').style.display = 'block';
+    el('thumb-q').style.display = 'none';
+    updatePreviewS();
   });
 
-  document.getElementById('input-level').addEventListener('change', function() {
-    state.level = this.value;
-    updatePreview();
+  el('type-question').addEventListener('click', function() {
+    mode = 'question';
+    el('type-question').classList.add('active');
+    el('type-standard').classList.remove('active');
+    el('controls-standard').style.display = 'none';
+    el('controls-question').style.display = 'flex';
+    el('thumb').style.display = 'none';
+    el('thumb-q').style.display = 'block';
+    updatePreviewQ();
   });
 
-  document.getElementById('input-size').addEventListener('input', function() {
-    state.fontSize = parseInt(this.value);
-    document.getElementById('size-value').textContent = state.fontSize;
-    updatePreview();
-  });
-
-  document.getElementById('input-level-size').addEventListener('input', function() {
-    state.levelSize = parseInt(this.value);
-    document.getElementById('level-size-value').textContent = state.levelSize;
-    updatePreview();
-  });
-
-  document.getElementById('input-mh-size').addEventListener('input', function() {
-    state.mhSize = parseInt(this.value);
-    document.getElementById('mh-size-value').textContent = state.mhSize;
-    updatePreview();
-  });
-
-  document.getElementById('input-sym-size').addEventListener('input', function() {
-    state.symSize = parseInt(this.value);
-    document.getElementById('sym-size-value').textContent = state.symSize;
-    updatePreview();
-  });
+  // ── Standard inputs ───────────────────────────────────
+  el('input-title').addEventListener('input', function() { S.title = this.value; updatePreviewS(); });
+  el('input-level').addEventListener('change', function() { S.level = this.value; updatePreviewS(); });
+  el('input-size').addEventListener('input', function() { S.fontSize = +this.value; el('size-value').textContent = S.fontSize; updatePreviewS(); });
+  el('input-level-size').addEventListener('input', function() { S.levelSize = +this.value; el('level-size-value').textContent = S.levelSize; updatePreviewS(); });
+  el('input-mh-size').addEventListener('input', function() { S.mhSize = +this.value; el('mh-size-value').textContent = S.mhSize; updatePreviewS(); });
+  el('input-sym-size').addEventListener('input', function() { S.symSize = +this.value; el('sym-size-value').textContent = S.symSize; updatePreviewS(); });
 
   document.querySelectorAll('.sym-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
-      state.symbol = btn.dataset.sym;
+      S.symbol = btn.dataset.sym;
       document.querySelectorAll('.sym-btn').forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
-      updatePreview();
+      updatePreviewS();
     });
   });
 
-  document.querySelectorAll('.color-btn').forEach(function(btn) {
+  document.querySelectorAll('.s-col').forEach(function(btn) {
     btn.addEventListener('click', function() {
-      state.color = btn.dataset.color;
-      document.querySelectorAll('.color-btn').forEach(function(b) { b.classList.remove('active'); });
+      S.color = btn.dataset.color;
+      document.querySelectorAll('.s-col').forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
-      updatePreview();
+      updatePreviewS();
     });
   });
 
-  document.getElementById('dl-btn').addEventListener('click', function() {
-    var W = 1280, H = 720;
-    var canvas = document.getElementById('canvas');
+  // ── Big Question inputs ───────────────────────────────
+  el('input-q-level').addEventListener('change', function() { Q.level = this.value; updatePreviewQ(); });
+  el('input-caption').addEventListener('input', function() { Q.caption = this.value; updatePreviewQ(); });
+  el('input-cap-size').addEventListener('input', function() { Q.captionSize = +this.value; el('cap-size-value').textContent = Q.captionSize; updatePreviewQ(); });
+  document.querySelectorAll('.qc-col').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      Q.captionColor = btn.dataset.color;
+      document.querySelectorAll('.qc-col').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      updatePreviewQ();
+    });
+  });
+
+  var qTimer;
+  el('input-question').addEventListener('input', function() {
+    Q.question = this.value;
+    clearTimeout(qTimer);
+    qTimer = setTimeout(updatePreviewQ, 400);
+  });
+
+  el('input-q-size').addEventListener('input', function() { Q.fontSize = +this.value; el('q-size-value').textContent = Q.fontSize; updatePreviewQ(); });
+
+  document.querySelectorAll('.q-col').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      Q.bgColor = btn.dataset.color;
+      document.querySelectorAll('.q-col').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      updatePreviewQ();
+    });
+  });
+
+  document.querySelectorAll('.qt-col').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      Q.textColor = btn.dataset.color;
+      document.querySelectorAll('.qt-col').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      updatePreviewQ();
+    });
+  });
+
+  // ── Canvas helpers ────────────────────────────────────
+  function wrapText(ctx, text, maxW) {
+    var words = text.split(' ');
+    var lines = [], line = '';
+    for (var i = 0; i < words.length; i++) {
+      var test = line ? line + ' ' + words[i] : words[i];
+      if (ctx.measureText(test).width > maxW && line) { lines.push(line); line = words[i]; }
+      else { line = test; }
+    }
+    if (line) lines.push(line);
+    return lines;
+  }
+
+  function drawStandard(ctx) {
+    ctx.clearRect(0, 0, CW, CH);
+    ctx.fillStyle = S.color;
+    ctx.fillRect(0, 0, CW, CH);
+
+    ctx.save();
+    ctx.translate(CW * 0.82, CH * 0.5);
+    ctx.rotate(12 * Math.PI / 180);
+    ctx.fillStyle = 'rgba(0,0,0,0.12)';
+    ctx.fillRect(-CW * 0.07, -CH, CW * 0.14, CH * 3);
+    ctx.restore();
+
+    ctx.save();
+    ctx.font = 'bold ' + (S.symSize * 2) + 'px Georgia,serif';
+    ctx.fillStyle = 'rgba(0,0,0,0.10)';
+    ctx.textBaseline = 'bottom'; ctx.textAlign = 'right';
+    ctx.fillText(S.symbol, CW + 40, CH + 120);
+    ctx.restore();
+
+    ctx.save();
+    ctx.font = '500 ' + (S.levelSize * 2) + 'px monospace';
+    ctx.fillStyle = 'rgba(255,255,255,0.75)';
+    ctx.textBaseline = 'top'; ctx.textAlign = 'left';
+    ctx.fillText(S.level.toUpperCase(), 116, 96);
+    ctx.restore();
+
+    ctx.save();
+    ctx.font = '500 ' + (S.mhSize * 2) + 'px monospace';
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.textBaseline = 'top'; ctx.textAlign = 'right';
+    ctx.fillText('MH', CW - 116, 88);
+    ctx.restore();
+
+    var pad = 116, maxW = CW - pad * 2;
+    var safeBottom = CH - 96;
+    var headerH = Math.max(S.levelSize, S.mhSize) * 2 + 200;
+    var availH = safeBottom - headerH;
+    var sz = S.fontSize * 2;
+
+    ctx.font = 'bold ' + sz + 'px Georgia,serif';
+    var lines = wrapText(ctx, S.title, maxW);
+    while (sz > 80 && lines.length * (sz * 0.95) > availH) {
+      sz -= 8;
+      ctx.font = 'bold ' + sz + 'px Georgia,serif';
+      lines = wrapText(ctx, S.title, maxW);
+    }
+
+    ctx.fillStyle = 'white';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+    var lineH = sz * 0.95, y = safeBottom;
+    for (var i = lines.length - 1; i >= 0; i--) {
+      ctx.fillText(lines[i], pad, y);
+      y -= lineH;
+    }
+  }
+
+  function drawQuestion(ctx, callback) {
+    ctx.clearRect(0, 0, CW, CH);
+    ctx.fillStyle = Q.bgColor;
+    ctx.fillRect(0, 0, CW, CH);
+
+    ctx.fillStyle = 'rgba(255,255,255,0.06)';
+    ctx.fillRect(0, 0, CW, CH * 0.18);
+    ctx.fillStyle = 'rgba(255,255,255,0.08)';
+    ctx.fillRect(0, CH * 0.18, CW, 3);
+
+    var accentCol = Q.textColor === '#FFFFFF' ? '#E8601C' : Q.textColor;
+    ctx.fillStyle = accentCol;
+    ctx.fillRect(0, 0, 12, CH);
+
+    ctx.save();
+    ctx.font = '500 100px monospace';
+    ctx.fillStyle = 'rgba(255,255,255,0.7)';
+    ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
+    ctx.fillText(Q.level.toUpperCase(), 80, CH * 0.09);
+    ctx.restore();
+
+    ctx.save();
+    ctx.font = '500 100px monospace';
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.textBaseline = 'middle'; ctx.textAlign = 'right';
+    ctx.fillText('MH', CW - 80, CH * 0.09);
+    ctx.restore();
+
+    ctx.save();
+    ctx.font = '500 ' + (Q.captionSize * 2) + 'px monospace';
+    ctx.fillStyle = Q.captionColor;
+    ctx.textBaseline = 'top'; ctx.textAlign = 'left';
+    ctx.fillText(Q.caption.toUpperCase(), 80, CH * 0.22);
+    ctx.restore();
+
+    var emSize = Q.fontSize * 2;
+    var containerW = CW - 160;
+
+    MathJax.tex2svgPromise(Q.question, {
+      em: emSize, ex: emSize * 0.431,
+      containerWidth: containerW, display: true
+    }).then(function(node) {
+      var svgEl = node.querySelector('svg');
+      if (!svgEl) { callback(); return; }
+
+      var styleStr = svgEl.getAttribute('style') || '';
+      var wMatch = styleStr.match(/width:\s*([\d.]+)ex/);
+      var hMatch = styleStr.match(/height:\s*([\d.]+)ex/);
+      var exPx = emSize * 0.431;
+      var svgW = wMatch ? parseFloat(wMatch[1]) * exPx : containerW;
+      var svgH = hMatch ? parseFloat(hMatch[1]) * exPx : emSize * 2;
+      var scale = Math.min(containerW / svgW, 1);
+      var drawW = svgW * scale, drawH = svgH * scale;
+
+      svgEl.setAttribute('width', drawW + 'px');
+      svgEl.setAttribute('height', drawH + 'px');
+      svgEl.style.color = Q.textColor;
+      svgEl.querySelectorAll('use,path,rect').forEach(function(e) { e.style.fill = Q.textColor; });
+
+      var blob = new Blob([new XMLSerializer().serializeToString(svgEl)], {type:'image/svg+xml;charset=utf-8'});
+      var url = URL.createObjectURL(blob);
+      var img = new Image();
+      img.onload = function() {
+        var topY = CH * 0.30, botY = CH - 60;
+        var centreY = topY + (botY - topY - drawH) / 2;
+        ctx.drawImage(img, 80, centreY, drawW, drawH);
+        URL.revokeObjectURL(url);
+        callback();
+      };
+      img.onerror = function() { URL.revokeObjectURL(url); callback(); };
+      img.src = url;
+    }).catch(function() { callback(); });
+  }
+
+  // ── Download ──────────────────────────────────────────
+  el('dl-btn').addEventListener('click', function() {
+    if (rendering) return;
+    rendering = true;
+    var btn = el('dl-btn');
+    btn.disabled = true; btn.textContent = 'Rendering…';
+    var canvas = el('canvas');
     var ctx = canvas.getContext('2d');
 
-    document.fonts.ready.then(function() {
-      ctx.clearRect(0, 0, W, H);
-
-      ctx.fillStyle = state.color;
-      ctx.fillRect(0, 0, W, H);
-
-      ctx.save();
-      ctx.translate(W * 0.82, H * 0.5);
-      ctx.rotate(12 * Math.PI / 180);
-      ctx.fillStyle = 'rgba(0,0,0,0.12)';
-      ctx.fillRect(-W * 0.07, -H, W * 0.14, H * 3);
-      ctx.restore();
-
-      ctx.save();
-      ctx.font = 'bold ' + state.symSize + 'px Georgia, serif';
-      ctx.fillStyle = 'rgba(0,0,0,0.10)';
-      ctx.textBaseline = 'bottom';
-      ctx.textAlign = 'right';
-      ctx.fillText(state.symbol, W + 20, H + 60);
-      ctx.restore();
-
-      ctx.save();
-      ctx.font = '500 ' + state.levelSize + 'px monospace';
-      ctx.fillStyle = 'rgba(255,255,255,0.75)';
-      ctx.textBaseline = 'top';
-      ctx.textAlign = 'left';
-      ctx.fillText(state.level.toUpperCase(), 58, 48);
-      ctx.restore();
-
-      ctx.save();
-      ctx.font = '300 ' + state.mhSize + 'px Fraunces, serif';
-      ctx.fillStyle = 'rgba(255,255,255,0.5)';
-      ctx.textBaseline = 'top';
-      ctx.textAlign = 'right';
-      ctx.fillText('MH', W - 58, 44);
-      ctx.restore();
-
-      var pad = 58;
-      var maxW = W - pad * 2;
-      var safeBottom = H - 48;
-      var headerBottom = Math.max(state.levelSize, state.mhSize) + 48 + 40;
-      var availH = safeBottom - headerBottom;
-
-      function wrapText(text, size) {
-        ctx.font = '800 ' + size + 'px Fraunces, serif';
-        var words = text.split(' ');
-        var lines = [];
-        var line = '';
-        for (var i = 0; i < words.length; i++) {
-          var test = line ? line + ' ' + words[i] : words[i];
-          if (ctx.measureText(test).width > maxW && line) { lines.push(line); line = words[i]; }
-          else line = test;
-        }
-        if (line) lines.push(line);
-        return lines;
-      }
-
-      var sz = state.fontSize;
-      var lines = wrapText(state.title, sz);
-      while (sz > 40 && lines.length * (sz * 0.95) > availH) {
-        sz -= 4;
-        lines = wrapText(state.title, sz);
-      }
-
-      ctx.save();
-      ctx.font = '800 ' + sz + 'px Fraunces, serif';
-      ctx.fillStyle = 'white';
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'bottom';
-      var lineH = sz * 0.95;
-      var y = safeBottom;
-      for (var i = lines.length - 1; i >= 0; i--) {
-        ctx.fillText(lines[i], pad, y);
-        y -= lineH;
-      }
-      ctx.restore();
-
+    function finish() {
+      var name = mode === 'question'
+        ? 'question-thumbnail.png'
+        : (S.title || 'thumbnail').toLowerCase().replace(/\s+/g, '-') + '-thumbnail.png';
       var a = document.createElement('a');
-      a.download = (state.title || 'thumbnail').toLowerCase().replace(/\s+/g, '-') + '-thumbnail.png';
-      a.href = canvas.toDataURL('image/png');
-      a.click();
+      a.download = name; a.href = canvas.toDataURL('image/png'); a.click();
+      rendering = false; btn.disabled = false; btn.textContent = '⬇ Download PNG (2560×1440)';
+    }
+
+    document.fonts.ready.then(function() {
+      if (mode === 'standard') { drawStandard(ctx); finish(); }
+      else { drawQuestion(ctx, finish); }
     });
   });
 
-  updatePreview();
-  window.addEventListener('resize', updatePreview);
+  // ── Init ─────────────────────────────────────────────
+  updatePreviewS();
+  window.addEventListener('resize', function() {
+    if (mode === 'standard') updatePreviewS(); else updatePreviewQ();
+  });
+
+  if (window.MathJax && MathJax.startup) {
+    MathJax.startup.promise.then(function() {
+      if (mode === 'question') updatePreviewQ();
+    });
+  }
+})();
 </script>

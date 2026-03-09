@@ -404,7 +404,7 @@ const { title = "Mikey Higgs", bare = false } = Astro.props;
 
     {!bare && (
       <div class="masthead">
-        <a href="/" class="masthead-name">Mikey Higgs </a>
+        <a href="/" class="masthead-name">M<span id="secret-i">i</span>key Higgs</a>
       </div>
     )}
 
@@ -449,5 +449,111 @@ const { title = "Mikey Higgs", bare = false } = Astro.props;
       });
     }
   </script>
+
+
+ <!-- Paste this just before </body> in Layout.astro -->
+
+<div id="secret-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);align-items:center;justify-content:center;">
+  <div id="secret-box" style="background:var(--bg);border:1.5px solid var(--rule);border-radius:12px;padding:2rem;max-width:380px;width:90%;position:relative;transform:translateY(20px);opacity:0;transition:all 0.25s ease;">
+    <div style="font-family:'DM Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--orange);margin-bottom:0.75rem;">Secret utilities</div>
+    <h3 style="font-family:Georgia,serif;font-size:1.4rem;font-weight:bold;color:var(--ink);margin:0 0 0.25rem;">You found it. 🎉</h3>
+    <p style="font-size:0.85rem;color:var(--muted);margin:0 0 1.5rem;font-family:'Atkinson Hyperlegible',sans-serif;">These tools aren't linked anywhere on the site.</p>
+    <div style="display:flex;flex-direction:column;gap:0.6rem;">
+      <a href="/studio" class="secret-link">
+        <span class="secret-link-title">Thumbnail Generator</span>
+        <span class="secret-link-arrow">→</span>
+      </a>
+      <a href="/worksheet-generator" class="secret-link">
+        <span class="secret-link-title">Worksheet Generator</span>
+        <span class="secret-link-arrow">→</span>
+      </a>
+    </div>
+    <button id="secret-close" style="position:absolute;top:1rem;right:1rem;background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--muted);line-height:1;">✕</button>
+  </div>
+</div>
+
+<style is:global>
+  #secret-i {
+    cursor: default;
+    border-radius: 2px;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .secret-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.7rem 1rem;
+    border: 1.5px solid var(--rule);
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--ink);
+    font-family: 'Atkinson Hyperlegible', sans-serif;
+    font-size: 0.9rem;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .secret-link:hover { border-color: var(--orange); color: var(--orange); }
+  .secret-link-title { font-weight: 600; }
+  .secret-link-arrow { color: var(--muted); font-size: 1rem; }
+</style>
+
+<script is:inline>
+(function() {
+  if (window.__secretReady) return;
+  window.__secretReady = true;
+
+  var count = 0;
+  var timer;
+  var trigger = document.getElementById('secret-i');
+  var modal = document.getElementById('secret-modal');
+  var box = document.getElementById('secret-box');
+  var closeBtn = document.getElementById('secret-close');
+
+  if (!trigger) return;
+
+  trigger.addEventListener('click', function(e) {
+    e.preventDefault();
+    count++;
+    clearTimeout(timer);
+
+    // Reset if no click within 1.5s
+    timer = setTimeout(function() {
+      count = 0;
+    }, 1500);
+
+    if (count >= 5) {
+      count = 0;
+      clearTimeout(timer);
+      openModal();
+    }
+  });
+
+  function openModal() {
+    modal.style.display = 'flex';
+    // Trigger transition on next frame
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        box.style.transform = 'translateY(0)';
+        box.style.opacity = '1';
+      });
+    });
+  }
+
+  function closeModal() {
+    box.style.transform = 'translateY(20px)';
+    box.style.opacity = '0';
+    setTimeout(function() { modal.style.display = 'none'; }, 250);
+  }
+
+  closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) closeModal();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeModal();
+  });
+})();
+</script>
+
 </body>
 </html>
